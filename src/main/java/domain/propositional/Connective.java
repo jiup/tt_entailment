@@ -1,11 +1,11 @@
-package domain;
+package domain.propositional;
 
 /**
  * @author Jiupeng Zhang
  * @since 10/12/2018
  */
 public enum Connective {
-    NULL, AND("∧"), OR("∨"), NOT("¬"), IMPLICATION("=>"), BI_IMPLICATION("<=>");
+    NULL, AND("∧"), OR("∨"), NOT("¬"), IMPLICATION("==>"), BI_IMPLICATION("<=>");
 
     String symbol;
 
