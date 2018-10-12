@@ -28,27 +28,33 @@ public class PLAlgorithms {
                 getSymbols(betaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
                 int symbolSize = symbols.size();
                 int sentenceSize = alphaSentences.length + betaSentences.length;
-                int tableSize = symbolSize + sentenceSize;
+                int tableSize = symbolSize + sentenceSize, p = symbolSize - 1;
                 this.initTable(symbolSize, sentenceSize);
-
-                // calculate alpha sentences
-                for (int j = 0; j < alphaSentences.length; j++) {
-                    Sentence s = alphaSentences[j];
+                while (++p < tableSize) {
+                    Sentence s;
+                    if (p < symbolSize + alphaSentences.length) {
+                        s = alphaSentences[p - symbolSize];
+                    } else {
+                        s = betaSentences[p - symbolSize - alphaSentences.length];
+                    }
                     for (int i = 0; i < truthTable.length; i++) {
-                        truthTable[i][symbolSize + j] = check(i, s);
+                        truthTable[i][p] = check(i, s);
                     }
                 }
-
-                // calculate beta sentences
-                for (int j = 0; j < betaSentences.length; j++) {
-                    Sentence s = betaSentences[j];
-                    for (int i = 0; i < truthTable.length; i++) {
-                        truthTable[i][tableSize - betaSentences.length + j] = check(i, s);
-                    }
-                }
-
                 // printTruthTable();
-                Set<Integer> range = reduce(alphaSentences, symbolSize);
+                return checkEntailment(reduce(alphaSentences, symbolSize), tableSize);
+            }
+
+            private void printTruthTable() {
+                List<Sentence> columns = new ArrayList<>();
+                columns.addAll(symbols.keySet());
+                columns.addAll(Arrays.asList(alphaSentences));
+                columns.addAll(Arrays.asList(betaSentences));
+                System.out.println(columns + Arrays.deepToString(truthTable).replaceAll("\\[+", "\n")
+                        .replaceAll("]+,? ?", ";").replaceAll("true", "T").replaceAll("false", "F"));
+            }
+
+            private boolean checkEntailment(Set<Integer> range, int tableSize) {
                 if (range.isEmpty()) {
                     return false;
                 }
@@ -60,15 +66,6 @@ public class PLAlgorithms {
                     }
                 }
                 return true;
-            }
-
-            private void printTruthTable() {
-                List<Sentence> columns = new ArrayList<>();
-                columns.addAll(symbols.keySet());
-                columns.addAll(Arrays.asList(alphaSentences));
-                columns.addAll(Arrays.asList(betaSentences));
-                System.out.println(columns + Arrays.deepToString(truthTable).replaceAll("\\[+", "\n")
-                        .replaceAll("]+,? ?", ";").replaceAll("true", "T").replaceAll("false", "F"));
             }
 
             private Set<Integer> reduce(Sentence[] alpha, int offset) {
