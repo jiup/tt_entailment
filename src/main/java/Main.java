@@ -4,14 +4,16 @@ import domain.propositional.Sentence;
 import knowledgebase.PLAlgorithms;
 import knowledgebase.PLKnowledgeBase;
 
+import java.util.Arrays;
+
 /**
  * @author Jiupeng Zhang
  * @since 10/11/2018
  */
 public class Main {
     public static boolean entails(PLKnowledgeBase kb, PLAlgorithms.Entailment strategy, Sentence... sentences) {
-//        System.out.println("KB:     " + kb.list());
-//        System.out.println("ALPHA:  " + Arrays.toString(sentences));
+        System.out.println("alpha:  " + kb.list());
+        System.out.println("beta:   " + Arrays.toString(sentences));
         return strategy.entails(kb, sentences);
     }
 

@@ -13,22 +13,23 @@ import java.util.*;
 public class PLAlgorithms {
     public enum Entailment implements EntailCheckStrategies {
         TruthTableChecking {
-            boolean[][] truthTable;
-            Map<AtomicSentence, Integer> symbols;
+            private boolean[][] truthTable;
+            private Map<AtomicSentence, Integer> symbols;
+            private Sentence[] alphaSentences;
+            private Sentence[] betaSentences;
 
             @Override
             public boolean entails(PLKnowledgeBase kb, Sentence... sentence) {
-                Sentence[] alphaSentences = kb.list().toArray(new Sentence[0]);
-
+                alphaSentences = kb.list().toArray(new Sentence[0]);
+                betaSentences = sentence;
                 symbols = new LinkedHashMap<>();
                 int[] index = {0};
                 getSymbols(alphaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
-                getSymbols(sentence).forEach(s -> symbols.putIfAbsent(s, index[0]++));
-                int symbolSize = symbols.size(), sentenceSize = kb.size() + sentence.length;
-                this.initTable(symbols.size(), sentenceSize);
-
-//                System.out.println(symbols.keySet() + ", " +
-//                        Arrays.toString(alphaSentences) + ", " + Arrays.toString(sentence));
+                getSymbols(betaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
+                int symbolSize = symbols.size();
+                int sentenceSize = alphaSentences.length + betaSentences.length;
+                int tableSize = symbolSize + sentenceSize;
+                this.initTable(symbolSize, sentenceSize);
 
                 // calculate alpha sentences
                 for (int j = 0; j < alphaSentences.length; j++) {
@@ -39,20 +40,38 @@ public class PLAlgorithms {
                 }
 
                 // calculate beta sentences
-                for (int j = 0; j < sentence.length; j++) {
-                    Sentence s = sentence[j];
+                for (int j = 0; j < betaSentences.length; j++) {
+                    Sentence s = betaSentences[j];
                     for (int i = 0; i < truthTable.length; i++) {
-                        truthTable[i][truthTable[0].length - sentence.length + j] = check(i, s);
+                        truthTable[i][tableSize - betaSentences.length + j] = check(i, s);
                     }
                 }
 
-//                System.out.println(Arrays.deepToString(truthTable).replaceAll("\\[+", "\n")
-//                        .replaceAll("]+,? ?", ";").replaceAll("true", "T").replaceAll("false", "F"));
-
-                return reduce(alphaSentences, symbolSize);
+                // printTruthTable();
+                Set<Integer> range = reduce(alphaSentences, symbolSize);
+                if (range.isEmpty()) {
+                    return false;
+                }
+                for (int i : range) {
+                    for (int j = 0; j < betaSentences.length; j++) {
+                        if (!truthTable[i][tableSize - betaSentences.length + j]) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
             }
 
-            private boolean reduce(Sentence[] alpha, int offset) {
+            private void printTruthTable() {
+                List<Sentence> columns = new ArrayList<>();
+                columns.addAll(symbols.keySet());
+                columns.addAll(Arrays.asList(alphaSentences));
+                columns.addAll(Arrays.asList(betaSentences));
+                System.out.println(columns + Arrays.deepToString(truthTable).replaceAll("\\[+", "\n")
+                        .replaceAll("]+,? ?", ";").replaceAll("true", "T").replaceAll("false", "F"));
+            }
+
+            private Set<Integer> reduce(Sentence[] alpha, int offset) {
                 Set<Integer> range = new HashSet<>();
                 for (int i = 0; i < truthTable.length; i++) range.add(i);
 
@@ -64,7 +83,7 @@ public class PLAlgorithms {
                         }
                     }
                 }
-                return !range.isEmpty();
+                return range;
             }
 
             private boolean check(int row, Sentence s) {
