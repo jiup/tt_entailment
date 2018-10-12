@@ -1,4 +1,4 @@
-package kb;
+package knowledgebase;
 
 import domain.Sentence;
 

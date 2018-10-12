@@ -1,30 +1,22 @@
 import domain.propositional.AtomicSentence;
-import domain.propositional.ComplexSentence;
-import domain.propositional.Connective;
 import domain.propositional.Sentence;
-import kb.PropositionalKnowledgeBase;
-
-import static domain.propositional.Connective.AND;
-import static domain.propositional.Connective.NOT;
+import knowledgebase.PLAlgorithms;
+import knowledgebase.PLKnowledgeBase;
 
 /**
  * @author Jiupeng Zhang
  * @since 10/11/2018
  */
 public class Main {
-    public boolean ttEntails(PropositionalKnowledgeBase kb, Sentence sentence) {
-        return false;
+    public static boolean entails(PLKnowledgeBase kb, PLAlgorithms.Entailment strategy, Sentence... sentences) {
+        return strategy.entails(kb, sentences);
     }
 
     public static void main(String[] args) {
-        System.out.println(AND);
-        System.out.println(Connective.OR);
-        System.out.println(Connective.NOT);
-        System.out.println(Connective.IMPLICATION);
-        System.out.println(Connective.BI_IMPLICATION);
-        System.out.println(Connective.NULL);
-        System.out.println(new ComplexSentence(AND, new ComplexSentence(NOT, AtomicSentence.TRUE), AtomicSentence.FALSE));
-        System.out.println(ComplexSentence.AND(ComplexSentence.NOT(AtomicSentence.TRUE), AtomicSentence.FALSE));
-        System.out.println(new ComplexSentence(AND, AtomicSentence.FALSE, AtomicSentence.TRUE));
+        PLKnowledgeBase knowledgeBase = new PLKnowledgeBase();
+        knowledgeBase.insert(new AtomicSentence("P")); // TODO
+        boolean result = entails(knowledgeBase, PLAlgorithms.Entailment.TruthTableChecking, AtomicSentence.TRUE);
+        System.out.println(result);
+        System.out.println(knowledgeBase.ask(AtomicSentence.TRUE));
     }
 }
