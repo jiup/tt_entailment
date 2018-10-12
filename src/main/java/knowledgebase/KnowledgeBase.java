@@ -2,7 +2,7 @@ package knowledgebase;
 
 import domain.Sentence;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -10,7 +10,7 @@ import java.util.Set;
  * @since 10/11/2018
  */
 public abstract class KnowledgeBase<T extends Sentence> {
-    protected Set<T> sentences = new HashSet<>();
+    protected Set<T> sentences = new LinkedHashSet<>();
 
     protected abstract boolean insert(T sentence);
 
@@ -20,5 +20,9 @@ public abstract class KnowledgeBase<T extends Sentence> {
 
     public int size() {
         return sentences.size();
+    }
+
+    public Set<T> list() {
+        return sentences;
     }
 }

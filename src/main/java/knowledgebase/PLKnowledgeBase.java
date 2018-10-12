@@ -9,20 +9,17 @@ import domain.propositional.Sentence;
 public class PLKnowledgeBase extends knowledgebase.KnowledgeBase<Sentence> {
     @Override
     public boolean insert(Sentence sentence) {
-        return false;
+        return sentences.add(sentence);
     }
 
     @Override
     public boolean remove(Sentence sentence) {
-        return false;
+        return sentences.remove(sentence);
     }
 
     @Override
     public boolean ask(Sentence querySentence) {
-        return false;
-    }
-
-    public boolean ttEntails(Sentence sentence) {
+        // TODO
         return false;
     }
 }

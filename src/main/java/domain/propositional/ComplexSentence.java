@@ -1,7 +1,7 @@
 package domain.propositional;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -36,11 +36,15 @@ public class ComplexSentence extends Sentence {
     public ComplexSentence(Connective connective, Sentence... clauses) {
         validate(connective, clauses.length);
         this.connective = connective;
-        this.clauses = new HashSet<>(Arrays.asList(clauses));
+        this.clauses = new LinkedHashSet<>(Arrays.asList(clauses));
     }
 
     public Set<Sentence> getClauses() {
         return clauses;
+    }
+
+    public Connective getConnective() {
+        return connective;
     }
 
     @Override
