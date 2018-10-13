@@ -41,7 +41,7 @@ public class PLAlgorithms {
                         truthTable[i][p] = check(i, s);
                     }
                 }
-                // printTruthTable();
+//                printTruthTable();
                 return checkEntailment(reduce(alphaSentences, symbolSize), tableSize);
             }
 
@@ -58,14 +58,20 @@ public class PLAlgorithms {
                 if (range.isEmpty()) {
                     return false;
                 }
+//                for (Integer row : range) {
+//                    for (int i = 0; i < tableSize; i++) {
+//                        System.out.print((truthTable[row][i] ? "T" : "F") + "  ");
+//                    }
+//                    System.out.println();
+//                }
                 for (int i : range) {
+                    boolean tmp = true;
                     for (int j = 0; j < betaSentences.length; j++) {
-                        if (!truthTable[i][tableSize - betaSentences.length + j]) {
-                            return false;
-                        }
+                        if (!truthTable[i][tableSize - betaSentences.length + j]) tmp = false;
                     }
+                    if (tmp) return true;
                 }
-                return true;
+                return false;
             }
 
             private Set<Integer> reduce(Sentence[] alpha, int offset) {
