@@ -65,20 +65,22 @@ public class ComplexSentence extends Sentence {
     public String toString() {
         Sentence[] clauses = new Sentence[this.clauses.size()];
         this.clauses.toArray(clauses);
-        StringBuilder builder = new StringBuilder("(");
+        StringBuilder builder = new StringBuilder();
         if (Connective.NULL.equals(connective)) {
             builder.append(clauses[0]);
         } else if (connective == Connective.NOT) {
             builder.append(connective).append(clauses[0]);
         } else {
+            builder.append("(");
             for (int i = 0; i < clauses.length; i++) {
                 builder.append(clauses[i]);
                 if (i < clauses.length - 1) {
                     builder.append(" ").append(connective).append(" ");
                 }
             }
+            builder.append(")");
         }
-        return builder.append(")").toString();
+        return builder.toString();
     }
 
     private void validate(Connective connective, int clauseCount) {

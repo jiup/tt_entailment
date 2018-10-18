@@ -12,66 +12,85 @@ import java.util.*;
  */
 public class PLAlgorithms {
     public enum Entailment implements EntailCheckStrategies {
-        TruthTableChecking {
+        ModelChecking {
             private boolean[][] truthTable;
             private Map<AtomicSentence, Integer> symbols;
             private Sentence[] alphaSentences;
             private Sentence[] betaSentences;
 
             @Override
-            public boolean entails(PLKnowledgeBase kb, Sentence... sentence) {
+            public boolean entails(PLKnowledgeBase kb, Sentence... sentences) {
                 alphaSentences = kb.list().toArray(new Sentence[0]);
-                betaSentences = sentence;
+                betaSentences = sentences;
                 symbols = new LinkedHashMap<>();
                 int[] index = {0};
                 getSymbols(alphaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
                 getSymbols(betaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
                 int symbolSize = symbols.size();
                 int sentenceSize = alphaSentences.length + betaSentences.length;
-                int tableSize = symbolSize + sentenceSize, p = symbolSize - 1;
-                this.initTable(symbolSize, sentenceSize);
-                while (++p < tableSize) {
-                    Sentence s;
-                    if (p < symbolSize + alphaSentences.length) {
-                        s = alphaSentences[p - symbolSize];
-                    } else {
-                        s = betaSentences[p - symbolSize - alphaSentences.length];
-                    }
-                    for (int i = 0; i < truthTable.length; i++) {
-                        truthTable[i][p] = check(i, s);
-                    }
-                }
-//                printTruthTable();
+                int tableSize = symbolSize + sentenceSize;
+                initTable(symbolSize, sentenceSize);
+                loadTruthTable(symbolSize, tableSize);
                 return checkEntailment(reduce(alphaSentences, symbolSize), tableSize);
             }
 
-            private void printTruthTable() {
-                List<Sentence> columns = new ArrayList<>();
-                columns.addAll(symbols.keySet());
-                columns.addAll(Arrays.asList(alphaSentences));
-                columns.addAll(Arrays.asList(betaSentences));
-                System.out.println(columns + Arrays.deepToString(truthTable).replaceAll("\\[+", "\n")
-                        .replaceAll("]+,? ?", ";").replaceAll("true", "T").replaceAll("false", "F"));
+            @Override
+            public int entailsCount(PLKnowledgeBase kb, Sentence... sentences) {
+                alphaSentences = kb.list().toArray(new Sentence[0]);
+                betaSentences = sentences;
+                symbols = new LinkedHashMap<>();
+                int[] index = {0};
+                getSymbols(alphaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
+                getSymbols(betaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
+                int symbolSize = symbols.size();
+                int sentenceSize = alphaSentences.length + betaSentences.length;
+                int tableSize = symbolSize + sentenceSize;
+                initTable(symbolSize, sentenceSize);
+                loadTruthTable(symbolSize, tableSize);
+                return checkEntailmentCount(reduce(alphaSentences, symbolSize), tableSize);
             }
 
             private boolean checkEntailment(Set<Integer> range, int tableSize) {
-                if (range.isEmpty()) {
-                    return false;
-                }
-//                for (Integer row : range) {
-//                    for (int i = 0; i < tableSize; i++) {
-//                        System.out.print((truthTable[row][i] ? "T" : "F") + "  ");
-//                    }
-//                    System.out.println();
-//                }
                 for (int i : range) {
-                    boolean tmp = true;
+                    boolean model = true;
                     for (int j = 0; j < betaSentences.length; j++) {
-                        if (!truthTable[i][tableSize - betaSentences.length + j]) tmp = false;
+                        if (!truthTable[i][tableSize - betaSentences.length + j]) {
+                            model = false;
+                            break;
+                        }
                     }
-                    if (tmp) return true;
+                    if (model) return true;
                 }
                 return false;
+            }
+
+            private int checkEntailmentCount(Set<Integer> range, int tableSize) {
+                int count = 0;
+                for (int i : range) {
+                    boolean model = true;
+                    for (int j = 0; j < betaSentences.length; j++) {
+                        if (!truthTable[i][tableSize - betaSentences.length + j]) {
+                            model = false;
+                            break;
+                        }
+                    }
+                    if (model) count++;
+
+                    // debug
+//                    if (model) {
+//                        ArrayList<Sentence> modelSentences = new ArrayList<>();
+//                        List<Sentence> columns = new ArrayList<Sentence>() {{
+//                            addAll(symbols.keySet());
+//                            addAll(Arrays.asList(alphaSentences));
+//                            addAll(Arrays.asList(betaSentences));
+//                        }};
+//                        for (int col = 0; col < tableSize; col++) {
+//                            modelSentences.add(truthTable[i][col] ? columns.remove(0) : ComplexSentence.NOT(columns.remove(0)));
+//                        }
+//                        System.out.println("Model #" + count + ": " + modelSentences.toString().replaceAll(", ", " ∧ "));
+//                    }
+                }
+                return count;
             }
 
             private Set<Integer> reduce(Sentence[] alpha, int offset) {
@@ -152,10 +171,40 @@ public class PLAlgorithms {
                     }
                 }
             }
+
+            private void loadTruthTable(int symbolSize, int tableSize) {
+                int p = symbolSize - 1;
+                while (++p < tableSize) {
+                    Sentence s;
+                    if (p < symbolSize + alphaSentences.length) {
+                        s = alphaSentences[p - symbolSize];
+                    } else {
+                        s = betaSentences[p - symbolSize - alphaSentences.length];
+                    }
+                    for (int i = 0; i < truthTable.length; i++) {
+                        truthTable[i][p] = check(i, s);
+                    }
+                }
+            }
+
+            // debug
+            private void printTruthTable(boolean withHead) {
+                if (withHead) {
+                    System.out.println(new ArrayList<Sentence>() {{
+                        addAll(symbols.keySet());
+                        addAll(Arrays.asList(alphaSentences));
+                        addAll(Arrays.asList(betaSentences));
+                    }});
+                }
+                System.out.println(Arrays.deepToString(truthTable).replaceAll("\\[+", "\n")
+                        .replaceAll("]+,? ?", ";").replaceAll("true", "T").replaceAll("false", "F"));
+            }
         }
     }
 
     interface EntailCheckStrategies {
-        boolean entails(PLKnowledgeBase kb, Sentence... sentence);
+        boolean entails(PLKnowledgeBase kb, Sentence... sentences);
+
+        int entailsCount(PLKnowledgeBase kb, Sentence... sentences);
     }
 }
