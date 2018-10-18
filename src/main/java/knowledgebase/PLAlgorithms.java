@@ -11,6 +11,8 @@ import java.util.*;
  * @since 10/12/2018
  */
 public class PLAlgorithms {
+    private static final boolean DEBUG = false;
+
     public enum Entailment implements EntailCheckStrategies {
         ModelChecking {
             private boolean[][] truthTable;
@@ -52,45 +54,48 @@ public class PLAlgorithms {
 
             private boolean checkEntailment(Set<Integer> range, int tableSize) {
                 for (int i : range) {
-                    boolean model = true;
                     for (int j = 0; j < betaSentences.length; j++) {
                         if (!truthTable[i][tableSize - betaSentences.length + j]) {
-                            model = false;
-                            break;
+                            return false;
                         }
                     }
-                    if (model) return true;
                 }
-                return false;
+                return true;
             }
 
             private int checkEntailmentCount(Set<Integer> range, int tableSize) {
+                List<Sentence> columns;
                 int count = 0;
+                boolean satisfy = true;
                 for (int i : range) {
                     boolean model = true;
                     for (int j = 0; j < betaSentences.length; j++) {
                         if (!truthTable[i][tableSize - betaSentences.length + j]) {
                             model = false;
+                            satisfy = false;
                             break;
                         }
                     }
                     if (model) count++;
 
-                    // debug
-//                    if (model) {
-//                        ArrayList<Sentence> modelSentences = new ArrayList<>();
-//                        List<Sentence> columns = new ArrayList<Sentence>() {{
-//                            addAll(symbols.keySet());
-//                            addAll(Arrays.asList(alphaSentences));
-//                            addAll(Arrays.asList(betaSentences));
-//                        }};
-//                        for (int col = 0; col < tableSize; col++) {
-//                            modelSentences.add(truthTable[i][col] ? columns.remove(0) : ComplexSentence.NOT(columns.remove(0)));
-//                        }
-//                        System.out.println("Model #" + count + ": " + modelSentences.toString().replaceAll(", ", " ∧ "));
-//                    }
+                    if (DEBUG) {
+                        ArrayList<Sentence> modelSentences = new ArrayList<>();
+                        columns = new ArrayList<Sentence>() {{
+                            addAll(symbols.keySet());
+                            addAll(Arrays.asList(alphaSentences));
+                            addAll(Arrays.asList(betaSentences));
+                        }};
+                        for (int col = 0; col < tableSize; col++) {
+                            modelSentences.add(truthTable[i][col] ? columns.remove(0) : ComplexSentence.NOT(columns.remove(0)));
+                        }
+                        if (model) {
+                            System.out.println("Model #" + count + ":\t" + modelSentences.toString().replaceAll(", ", " ∧ "));
+                        } else {
+                            System.out.println("False L" + i + ":\t" + modelSentences.toString().replaceAll(", ", " ∧ "));
+                        }
+                    }
                 }
-                return count;
+                return satisfy ? count : -count;
             }
 
             private Set<Integer> reduce(Sentence[] alpha, int offset) {

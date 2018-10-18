@@ -35,19 +35,9 @@ public class PartOneTest {
         AtomicSentence mythical = new AtomicSentence("mythical");
         AtomicSentence magical = new AtomicSentence("magical");
         AtomicSentence horned = new AtomicSentence("horned");
-
-        // TODO
-        System.out.println(ModelChecking.entailsCount(hornClausesKnowledgeBase(), mythical));
-        System.out.println(ModelChecking.entails(hornClausesKnowledgeBase(), mythical) && ModelChecking.entails(hornClausesKnowledgeBase(), NOT(mythical)));
-        Assert.assertSame(ModelChecking.entails(hornClausesKnowledgeBase(), mythical), ModelChecking.entails(hornClausesKnowledgeBase(), NOT(mythical)));
-
-        System.out.println(ModelChecking.entailsCount(hornClausesKnowledgeBase(), magical));
-        System.out.println(ModelChecking.entails(hornClausesKnowledgeBase(), magical) && ModelChecking.entails(hornClausesKnowledgeBase(), NOT(magical)));
-        Assert.assertSame(ModelChecking.entails(hornClausesKnowledgeBase(), magical), ModelChecking.entails(hornClausesKnowledgeBase(), NOT(magical)));
-
-        System.out.println(ModelChecking.entailsCount(hornClausesKnowledgeBase(), horned));
-        System.out.println(ModelChecking.entails(hornClausesKnowledgeBase(), horned) && ModelChecking.entails(hornClausesKnowledgeBase(), NOT(horned)));
-        Assert.assertSame(ModelChecking.entails(hornClausesKnowledgeBase(), horned), ModelChecking.entails(hornClausesKnowledgeBase(), NOT(horned)));
+        Assert.assertFalse(ModelChecking.entails(hornClausesKnowledgeBase(), mythical));
+        Assert.assertTrue(ModelChecking.entails(hornClausesKnowledgeBase(), magical));
+        Assert.assertTrue(ModelChecking.entails(hornClausesKnowledgeBase(), horned));
     }
 
     @Test
@@ -85,7 +75,10 @@ public class PartOneTest {
         AtomicSentence y = new AtomicSentence("Y");
         AtomicSentence z = new AtomicSentence("Z");
         AtomicSentence w = new AtomicSentence("W");
-        Assert.assertTrue(ModelChecking.entails(doorsOfEnlightenmentKnowledgeBase(), AND(x, NOT(y), NOT(z), NOT(w))));
+        Assert.assertTrue(ModelChecking.entails(doorsOfEnlightenmentKnowledgeBase(), x));
+        Assert.assertFalse(ModelChecking.entails(doorsOfEnlightenmentKnowledgeBase(), y));
+        Assert.assertFalse(ModelChecking.entails(doorsOfEnlightenmentKnowledgeBase(), z));
+        Assert.assertFalse(ModelChecking.entails(doorsOfEnlightenmentKnowledgeBase(), w));
     }
 
     private PLKnowledgeBase exampleKnowledgeBase() {
