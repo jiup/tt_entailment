@@ -10,6 +10,7 @@ public enum Connective {
     String symbol;
 
     Connective() {
+        //.
     }
 
     Connective(String symbol) {
