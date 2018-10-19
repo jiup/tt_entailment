@@ -4,6 +4,7 @@ import domain.propositional.AtomicSentence;
 import domain.propositional.ComplexSentence;
 import domain.propositional.Connective;
 import domain.propositional.Sentence;
+import util.propositional.SentenceUtil;
 
 import java.util.*;
 
@@ -12,7 +13,7 @@ import java.util.*;
  * @since 10/12/2018
  */
 public class PLAlgorithms {
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     public enum Entailment implements EntailCheckStrategies {
         ModelChecking {
@@ -29,8 +30,8 @@ public class PLAlgorithms {
                 betaSentences = sentences;
                 symbols = new LinkedHashMap<>();
                 int[] index = {0};
-                getSymbols(alphaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
-                getSymbols(betaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
+                SentenceUtil.getSymbols(alphaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
+                SentenceUtil.getSymbols(betaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
                 int symbolSize = symbols.size();
                 int sentenceSize = alphaSentences.length + betaSentences.length;
                 int tableSize = symbolSize + sentenceSize;
@@ -46,8 +47,8 @@ public class PLAlgorithms {
                 betaSentences = sentences;
                 symbols = new LinkedHashMap<>();
                 int[] index = {0};
-                getSymbols(alphaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
-                getSymbols(betaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
+                SentenceUtil.getSymbols(alphaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
+                SentenceUtil.getSymbols(betaSentences).forEach(s -> symbols.putIfAbsent(s, index[0]++));
                 int symbolSize = symbols.size();
                 int sentenceSize = alphaSentences.length + betaSentences.length;
                 int tableSize = symbolSize + sentenceSize;
@@ -153,18 +154,6 @@ public class PLAlgorithms {
                 return false;
             }
 
-            private Set<AtomicSentence> getSymbols(Sentence... sentences) {
-                Set<AtomicSentence> symbols = new LinkedHashSet<>();
-                for (Sentence s : sentences) {
-                    if (s instanceof AtomicSentence) {
-                        symbols.add((AtomicSentence) s);
-                    } else if (s instanceof ComplexSentence) {
-                        symbols.addAll(getSymbols((((ComplexSentence) s).getClauses().toArray(new Sentence[0]))));
-                    }
-                }
-                return symbols;
-            }
-
             private void initTable(int symbolSize, int sentenceSize) {
                 truthTable = new boolean[(int) Math.pow(2, symbolSize)][symbolSize + sentenceSize];
                 for (int j = 0; j < symbolSize; j++) {
@@ -207,6 +196,84 @@ public class PLAlgorithms {
                 }
                 System.out.println(Arrays.deepToString(truthTable).replaceAll("\\[+", "\n")
                         .replaceAll("]+,? ?", ";").replaceAll("true", "T").replaceAll("false", "F"));
+            }
+        },
+
+        RecursiveModelChecking {
+            public boolean ttCheckAll(Set<Sentence> kb, Set<AtomicSentence> symbols, HashMap<AtomicSentence, Boolean> model, Sentence... sentences) {
+                if (symbols.isEmpty()) {
+                    if (isTrueS(model, kb.toArray(new Sentence[0]))) {
+                        return isTrueS(model, sentences);
+                    } else {
+                        return true;
+                    }
+                }
+                AtomicSentence p = symbols.iterator().next();
+                symbols.remove(p);
+                HashMap<AtomicSentence, Boolean> model1 = new HashMap<>(model);
+                model1.put(p, true);
+                model.put(p, false);
+                return ttCheckAll(kb, new HashSet<>(symbols), model, sentences)
+                        && ttCheckAll(kb, new HashSet<>(symbols), model1, sentences);
+            }
+
+            private boolean isTrue(HashMap<AtomicSentence, Boolean> model, Sentence sentence) {
+                if (sentence instanceof AtomicSentence) {
+                    AtomicSentence s = (AtomicSentence) sentence;
+                    return model.get(s);
+                }
+                ComplexSentence cs = (ComplexSentence) sentence;
+                Sentence[] clauses = cs.getClauses().toArray(new Sentence[0]);
+                switch (cs.getConnective()) {
+                    case NOT:
+                        return !isTrue(model, clauses[0]);
+                    case OR:
+                        Boolean result = false;
+                        for (Sentence s : clauses) {
+                            result = result || isTrue(model, s);
+                        }
+                        return result;
+                    case AND:
+                        result = true;
+                        for (Sentence s : clauses) {
+                            result = result && isTrue(model, s);
+                        }
+                        return result;
+                    case IMPLICATION:
+                        result = null;
+                        for (Sentence s : clauses) {
+                            result = result == null ? isTrue(model, s) : !result || isTrue(model, s);
+                        }
+                        //noinspection ConstantConditions
+                        return result;
+                    case BI_IMPLICATION:
+                        result = null;
+                        for (Sentence s : clauses) {
+                            result = result == null ? isTrue(model, s) : result == isTrue(model, s);
+                        }
+                        //noinspection ConstantConditions
+                        return result;
+                }
+                return false;
+            }
+
+            private boolean isTrueS(HashMap<AtomicSentence, Boolean> model, Sentence... sentences) {
+                boolean result = true;
+                for (Sentence sentence : sentences) {
+                    result = result && isTrue(model, sentence);
+                }
+                return result;
+            }
+
+            @Override
+            public boolean entails(PLKnowledgeBase kb, Sentence... sentences) {
+                Set<Sentence> KB = kb.list();
+                Set<AtomicSentence> symbols = new HashSet<>();
+                for (Sentence s : KB) {
+                    symbols.addAll(SentenceUtil.getSymbols(s));
+                }
+                HashMap<AtomicSentence, Boolean> model = new HashMap<>();
+                return ttCheckAll(KB, symbols, model, sentences);
             }
         },
 

@@ -5,6 +5,7 @@ import org.junit.Test;
 import static domain.propositional.ComplexSentence.AND;
 import static domain.propositional.ComplexSentence.NOT;
 import static knowledgebase.PLAlgorithms.Entailment.ModelChecking;
+import static knowledgebase.PLAlgorithms.Entailment.RecursiveModelChecking;
 
 /**
  * @author Jiupeng Zhang
@@ -16,18 +17,21 @@ public class ModelCheckingTest {
         AtomicSentence w12 = new AtomicSentence("W12");
         AtomicSentence w21 = new AtomicSentence("W21");
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.exampleKnowledgeBase(), NOT(w12), NOT(w21)));
+        Assert.assertTrue(RecursiveModelChecking.entails(KnowledgeBases.exampleKnowledgeBase(), NOT(w12), NOT(w21)));
     }
 
     @Test
     public void testModusPonens() {
         AtomicSentence q = new AtomicSentence("Q");
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.modusPonensKnowledgeBase(), q));
+        Assert.assertTrue(RecursiveModelChecking.entails(KnowledgeBases.modusPonensKnowledgeBase(), q));
     }
 
     @Test
     public void testSimpleWumpusWorld() {
         AtomicSentence p12 = new AtomicSentence("P12");
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.wumpusWorldKnowledgeBase(), NOT(p12)));
+        Assert.assertTrue(RecursiveModelChecking.entails(KnowledgeBases.wumpusWorldKnowledgeBase(), NOT(p12)));
     }
 
     @Test
@@ -38,6 +42,9 @@ public class ModelCheckingTest {
         Assert.assertFalse(ModelChecking.entails(KnowledgeBases.hornClausesKnowledgeBase(), mythical));
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.hornClausesKnowledgeBase(), magical));
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.hornClausesKnowledgeBase(), horned));
+        Assert.assertFalse(RecursiveModelChecking.entails(KnowledgeBases.hornClausesKnowledgeBase(), mythical));
+        Assert.assertTrue(RecursiveModelChecking.entails(KnowledgeBases.hornClausesKnowledgeBase(), magical));
+        Assert.assertTrue(RecursiveModelChecking.entails(KnowledgeBases.hornClausesKnowledgeBase(), horned));
     }
 
     @Test
@@ -47,6 +54,8 @@ public class ModelCheckingTest {
         AtomicSentence cal = new AtomicSentence("Cal");
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(), AND(NOT(amy), NOT(bob), cal)));
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(), AND(amy, NOT(bob), NOT(cal))));
+        Assert.assertTrue(RecursiveModelChecking.entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(), AND(NOT(amy), NOT(bob), cal)));
+        Assert.assertTrue(RecursiveModelChecking.entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(), AND(amy, NOT(bob), NOT(cal))));
     }
 
     @Test
@@ -66,6 +75,9 @@ public class ModelCheckingTest {
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), AND(
                 NOT(Amy), NOT(Bob), NOT(Cal), NOT(Dee), NOT(Eli), NOT(Fay), NOT(Gil), NOT(Hal), NOT(Ida), Jay, Kay, NOT(Lee)
         )));
+        Assert.assertTrue(RecursiveModelChecking.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), AND(
+                NOT(Amy), NOT(Bob), NOT(Cal), NOT(Dee), NOT(Eli), NOT(Fay), NOT(Gil), NOT(Hal), NOT(Ida), Jay, Kay, NOT(Lee)
+        )));
     }
 
     @Test
@@ -78,5 +90,9 @@ public class ModelCheckingTest {
         Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(), y));
         Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(), z));
         Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(), w));
+        Assert.assertTrue(RecursiveModelChecking.entails(KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(), x));
+        Assert.assertFalse(RecursiveModelChecking.entails(KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(), y));
+        Assert.assertFalse(RecursiveModelChecking.entails(KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(), z));
+        Assert.assertFalse(RecursiveModelChecking.entails(KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(), w));
     }
 }
