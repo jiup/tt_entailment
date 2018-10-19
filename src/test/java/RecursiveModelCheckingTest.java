@@ -7,7 +7,7 @@ import static domain.propositional.ComplexSentence.NOT;
 import static knowledgebase.PLAlgorithms.Entailment.RecursiveModelChecking;
 
 /**
- * @author Jiupeng Zhang
+ * @author Yu Zhang
  * @since 10/19/2018
  */
 public class RecursiveModelCheckingTest {

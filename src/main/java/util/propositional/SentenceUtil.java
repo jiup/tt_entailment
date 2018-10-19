@@ -8,7 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * @author Jiupeng Zhang
+ * @author Jiupeng Zhang, Yu Zhang
  * @since 10/19/2018
  */
 public class SentenceUtil {

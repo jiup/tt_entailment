@@ -9,7 +9,7 @@ import util.propositional.SentenceUtil;
 import java.util.*;
 
 /**
- * @author Jiupeng Zhang
+ * @author (Jiupeng ∨ Lu ∨ Yu) ∧ Zhang
  * @since 10/12/2018
  */
 public class PLAlgorithms {
