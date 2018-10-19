@@ -21,7 +21,10 @@ public class ComplexSentence extends Sentence {
         return new ComplexSentence(Connective.OR, clauses);
     }
 
-    public static ComplexSentence NOT(Sentence sentence) {
+    public static Sentence NOT(Sentence sentence) {
+        if (sentence instanceof ComplexSentence && ((ComplexSentence) sentence).getConnective().equals(Connective.NOT)) {
+            return ((ComplexSentence) sentence).getClauses().iterator().next();
+        }
         return new ComplexSentence(Connective.NOT, sentence);
     }
 

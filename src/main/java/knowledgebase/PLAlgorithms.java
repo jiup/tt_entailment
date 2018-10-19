@@ -2,6 +2,7 @@ package knowledgebase;
 
 import domain.propositional.AtomicSentence;
 import domain.propositional.ComplexSentence;
+import domain.propositional.Connective;
 import domain.propositional.Sentence;
 
 import java.util.*;
@@ -22,6 +23,8 @@ public class PLAlgorithms {
 
             @Override
             public boolean entails(PLKnowledgeBase kb, Sentence... sentences) {
+                if (kb.size() == 0) return true;
+
                 alphaSentences = kb.list().toArray(new Sentence[0]);
                 betaSentences = sentences;
                 symbols = new LinkedHashMap<>();
@@ -36,8 +39,9 @@ public class PLAlgorithms {
                 return checkEntailment(reduce(alphaSentences, symbolSize), tableSize);
             }
 
-            @Override
             public int entailsCount(PLKnowledgeBase kb, Sentence... sentences) {
+                if (kb.size() == 0) return 0;
+
                 alphaSentences = kb.list().toArray(new Sentence[0]);
                 betaSentences = sentences;
                 symbols = new LinkedHashMap<>();
@@ -204,12 +208,165 @@ public class PLAlgorithms {
                 System.out.println(Arrays.deepToString(truthTable).replaceAll("\\[+", "\n")
                         .replaceAll("]+,? ?", ";").replaceAll("true", "T").replaceAll("false", "F"));
             }
+        },
+
+        Resolution {
+            private final Sentence EMPTY_CLAUSE = new AtomicSentence(null);
+            private Set<Sentence> resolvents;
+            private Sentence[] clauses;
+
+            @Override
+            public boolean entails(PLKnowledgeBase kb, Sentence... sentences) {
+                if (sentences.length > 1) throw new IllegalArgumentException("too many sentences > 1");
+                checkClauses(sentences);
+                resolvents = new HashSet<Sentence>(kb.sentences) {{
+                    for (Sentence sentence : sentences) {
+                        Set<Sentence> negatedSentences = negate(sentence);
+                        addAll(negatedSentences);
+                    }
+                }};
+                checkClauses(resolvents.toArray(new Sentence[0]));
+
+                while (kb.size() > 0) {
+                    if (DEBUG) System.out.println(resolvents);
+                    Sentence[] clauses = resolvents.toArray(new Sentence[0]);
+                    Set<Sentence> newResolvents = new HashSet<>();
+                    for (int i = 0; i < clauses.length; i++) {
+                        for (int j = i + 1; j < clauses.length; j++) {
+                            if (DEBUG) System.out.println("resolve " + clauses[i] + ", " + clauses[j]);
+                            Set<Sentence> tmp = resolve(clauses[i], clauses[j]);
+                            if (tmp.contains(EMPTY_CLAUSE)) {
+                                return true;
+                            }
+                            if (DEBUG && !tmp.isEmpty()) System.out.println("add new " + tmp);
+                            newResolvents.addAll(tmp);
+                        }
+                    }
+                    if (resolvents.containsAll(newResolvents)) {
+                        return false;
+                    }
+                    resolvents.addAll(newResolvents);
+                }
+                return true;
+            }
+
+            private Set<Sentence> resolve(Sentence clause1, Sentence clause2) {
+                Set<Sentence> combination = new HashSet<>();
+                Set<Sentence> sentences1;
+                Set<Sentence> sentences2 = new HashSet<Sentence>() {{
+                    if (clause2 instanceof AtomicSentence) add(clause2);
+                    if (clause2 instanceof ComplexSentence) {
+                        if (((ComplexSentence) clause2).getConnective().equals(Connective.NOT)) {
+                            add(clause2);
+                        } else {
+                            addAll(((ComplexSentence) clause2).getClauses()); // DNF clauses
+                        }
+                    }
+                }};
+
+                for (Sentence c1 : (sentences1 = new HashSet<Sentence>() {{
+                    if (clause1 instanceof AtomicSentence) add(clause1);
+                    if (clause1 instanceof ComplexSentence) {
+                        if (((ComplexSentence) clause1).getConnective().equals(Connective.NOT)) {
+                            add(clause1);
+                        } else {
+                            addAll(((ComplexSentence) clause1).getClauses()); // DNF clauses
+                        }
+                    }
+                }})) {
+                    //noinspection ConstantConditions
+                    for (Sentence c2 : sentences2) {
+                        if (c1 instanceof ComplexSentence && c2 instanceof AtomicSentence) {
+                            ComplexSentence negateSentence = (ComplexSentence) c1;
+                            if (((ComplexSentence) c1).getClauses().contains(c2)) {
+                                combination.add(combine(sentences1, sentences2, (AtomicSentence) c2));
+                            }
+                        }
+                        if (c2 instanceof ComplexSentence && c1 instanceof AtomicSentence) {
+                            ComplexSentence negateSentence = (ComplexSentence) c2;
+                            if (((ComplexSentence) c2).getClauses().contains(c1)) {
+                                combination.add(combine(sentences1, sentences2, (AtomicSentence) c1));
+                            }
+                        }
+                    }
+                }
+                return combination;
+            }
+
+            // combine to new DNF
+            private Sentence combine(Set<Sentence> clause1, Set<Sentence> clause2, AtomicSentence skip) {
+                Set<Sentence> sentences = new HashSet<>();
+                sentences.addAll(clause1);
+                sentences.addAll(clause2);
+                sentences.remove(skip);
+                sentences.remove(ComplexSentence.NOT(skip));
+                switch (sentences.size()) {
+                    case 0:
+                        return EMPTY_CLAUSE;
+                    case 1:
+                        return sentences.iterator().next();
+                    default:
+                        return ComplexSentence.OR(sentences.toArray(new Sentence[0]));
+                }
+            }
+
+            private Set<Sentence> negate(Sentence DNF) {
+                if (DNF instanceof AtomicSentence) {
+                    return new HashSet<Sentence>() {{
+                        add(ComplexSentence.NOT(DNF));
+                    }};
+                } else {
+                    Connective conn = ((ComplexSentence) DNF).getConnective();
+                    Set<Sentence> sentences = ((ComplexSentence) DNF).getClauses();
+                    if (conn.equals(Connective.NOT)) return sentences;
+                    Set<Sentence> negate = new LinkedHashSet<>();
+                    Set<Sentence> negated = new LinkedHashSet<>();
+                    for (Sentence s : sentences) {
+                        if (s instanceof AtomicSentence) {
+                            negated.add(new ComplexSentence(Connective.NOT, s));
+                        } else {
+                            negated.add(((ComplexSentence) s).getClauses().iterator().next());
+                        }
+                    }
+                    if (conn.equals(Connective.AND)) {
+                        negate.add(new ComplexSentence(Connective.OR, negated.toArray(new Sentence[0])));
+                        return negate;
+                    } else {
+                        return negated;
+                    }
+                }
+            }
+
+            // only accept DNF clauses
+            private void checkClauses(Sentence... clauses) {
+                checkClauses(1, clauses);
+            }
+
+            private void checkClauses(int limit, Sentence... clauses) {
+                for (Sentence c : clauses) {
+                    if (c instanceof AtomicSentence) continue;
+                    if (c instanceof ComplexSentence) {
+                        ComplexSentence sentence = (ComplexSentence) c;
+                        switch (sentence.getConnective()) {
+                            case NOT:
+                                continue;
+                            case OR:
+                                if (limit == 0) throw new IllegalArgumentException("nesting out of limit");
+                                for (Sentence s : sentence.getClauses()) {
+                                    checkClauses(limit - 1, s);
+                                }
+                                break;
+                            default:
+                                if (limit == 0) throw new IllegalArgumentException("nesting out of limit");
+                                throw new IllegalArgumentException("invalid connective for resolution (DNF expected)");
+                        }
+                    }
+                }
+            }
         }
     }
 
     interface EntailCheckStrategies {
         boolean entails(PLKnowledgeBase kb, Sentence... sentences);
-
-        int entailsCount(PLKnowledgeBase kb, Sentence... sentences);
     }
 }
