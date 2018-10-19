@@ -23,4 +23,8 @@ public class SentenceUtil {
         }
         return symbols;
     }
+
+    public static Set<Sentence> convert2DNF(Sentence sentence) {
+        return null;
+    }
 }
