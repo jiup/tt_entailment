@@ -13,7 +13,7 @@ import java.util.*;
  * @since 10/12/2018
  */
 public class PLAlgorithms {
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     public enum Entailment implements EntailCheckStrategies {
         ModelChecking {
@@ -68,6 +68,7 @@ public class PLAlgorithms {
                 return true;
             }
 
+            @SuppressWarnings("UnusedAssignment")
             private int checkEntailmentCount(Set<Integer> range, int tableSize) {
                 List<Sentence> columns;
                 int count = 0;
@@ -362,7 +363,7 @@ public class PLAlgorithms {
 
             // combine to new DNF
             private Sentence combine(Set<Sentence> clause1, Set<Sentence> clause2, AtomicSentence skip) {
-                Set<Sentence> sentences = new HashSet<>();
+                List<Sentence> sentences = new ArrayList<>();
                 sentences.addAll(clause1);
                 sentences.addAll(clause2);
                 sentences.remove(skip);

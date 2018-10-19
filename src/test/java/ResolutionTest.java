@@ -75,15 +75,13 @@ public class ResolutionTest {
     }
 
     @Test
-    @Ignore
     public void testHornClauses() {
         AtomicSentence mythical = new AtomicSentence("mythical");
         AtomicSentence magical = new AtomicSentence("magical");
         AtomicSentence horned = new AtomicSentence("horned");
-        System.out.println(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(true), mythical));
-        System.out.println(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(true), NOT(mythical)));
-//        Assert.assertTrue(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(true), magical));
-//        Assert.assertTrue(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(true), horned));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(true), mythical));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(true), magical));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(true), horned));
     }
 
     @Test
