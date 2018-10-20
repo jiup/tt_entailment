@@ -27,4 +27,9 @@ public class SentenceUtil {
     public static Set<Sentence> convert2DNF(Sentence sentence) {
         return null;
     }
+
+    public static void main(String[] args) {
+        System.out.println(ComplexSentence.IMPLIES(new AtomicSentence("a"), new AtomicSentence("a")));
+        System.out.println(ComplexSentence.AND(new AtomicSentence("a"), new AtomicSentence("a"), new AtomicSentence("b")));
+    }
 }

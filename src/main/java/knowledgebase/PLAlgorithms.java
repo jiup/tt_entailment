@@ -374,7 +374,13 @@ public class PLAlgorithms {
                     case 1:
                         return sentences.iterator().next();
                     default:
-                        return ComplexSentence.OR(sentences.toArray(new Sentence[0]));
+                        Set<Sentence> set = new HashSet<>(sentences);
+                        if (set.size() == 1) {
+                            // single sentence remained after deduplicate
+                            return set.iterator().next();
+                        } else {
+                            return ComplexSentence.OR(set.toArray(new Sentence[0]));
+                        }
                 }
             }
 

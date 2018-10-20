@@ -37,9 +37,17 @@ public class ComplexSentence extends Sentence {
     }
 
     public ComplexSentence(Connective connective, Sentence... clauses) {
-        validate(connective, clauses.length);
         this.connective = connective;
         this.clauses = new LinkedHashSet<>(Arrays.asList(clauses));
+        try {
+            validate(connective, this.clauses.size());
+        } catch (IllegalArgumentException e) {
+            if (this.clauses.size() == clauses.length) {
+                throw new IllegalArgumentException(e.getMessage());
+            } else {
+                throw new IllegalArgumentException("clauses deduplication leads to " + e.getMessage());
+            }
+        }
     }
 
     public Set<Sentence> getClauses() {
@@ -109,7 +117,7 @@ public class ComplexSentence extends Sentence {
             case IMPLICATION:
             case BI_IMPLICATION:
                 if (clauseCount != 2)
-                    throw new IllegalArgumentException("invalid clause number for '" + connective.name() + "', expected 2");
+                    throw new IllegalArgumentException("invalid clause count for '" + connective.name() + "', expected 2");
                 break;
         }
     }
