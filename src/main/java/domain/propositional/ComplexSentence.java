@@ -55,13 +55,16 @@ public class ComplexSentence extends Sentence {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ComplexSentence that = (ComplexSentence) o;
-        return connective == that.connective &&
-                Objects.equals(clauses, that.clauses);
+        return connective == that.connective && (connective.equals(Connective.IMPLICATION) ?
+                Arrays.equals(clauses.toArray(), that.clauses.toArray()) :
+                Objects.equals(clauses, that.clauses));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(connective, clauses);
+        return connective.equals(Connective.IMPLICATION) ?
+                Objects.hash(connective, clauses.toArray()[0]) :
+                Objects.hash(connective, clauses);
     }
 
     @Override
