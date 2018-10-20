@@ -63,7 +63,7 @@ public class ComplexSentence extends Sentence {
     @Override
     public int hashCode() {
         return connective.equals(Connective.IMPLICATION) ?
-                Objects.hash(connective, clauses.toArray()[0]) :
+                Objects.hash(connective, clauses, clauses.toArray()[0]) :
                 Objects.hash(connective, clauses);
     }
 
