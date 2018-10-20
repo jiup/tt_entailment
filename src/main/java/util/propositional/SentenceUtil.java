@@ -32,83 +32,88 @@ public class SentenceUtil {
         }
         Set<Sentence> tmpBefore = new HashSet<>(beforeConvert);
         for (Sentence s : tmpBefore) {
+            boolean isNegateSentence = true;
             if (s instanceof ComplexSentence) {
                 ComplexSentence complexSentence = (ComplexSentence) s;
-                Sentence[] clauses = complexSentence.getClauses().toArray(new Sentence[0]);
-                switch (complexSentence.getConnective()) {
-                    case AND:
-                        for (Sentence clause : clauses) {
-                            boolean flag = true;
-                            if (clause instanceof ComplexSentence) {
-                                ComplexSentence compClause = (ComplexSentence) clause;
-                                if (!compClause.getConnective().equals(Connective.NOT)) {
-                                    beforeConvert.add(clause);
-                                    flag = false;
+                if (!complexSentence.getConnective().equals(Connective.NOT)) {
+                    isNegateSentence = false;
+                    Sentence[] clauses = complexSentence.getClauses().toArray(new Sentence[0]);
+                    switch (complexSentence.getConnective()) {
+                        case AND:
+                            for (Sentence clause : clauses) {
+                                boolean flag = true;
+                                if (clause instanceof ComplexSentence) {
+                                    ComplexSentence compClause = (ComplexSentence) clause;
+                                    if (!compClause.getConnective().equals(Connective.NOT)) {
+                                        beforeConvert.add(clause);
+                                        flag = false;
+                                    }
                                 }
+                                if (flag) afterConvert.add(clause);
                             }
-                            if (flag) afterConvert.add(clause);
-                        }
-                        beforeConvert.remove(s);
-                        break;
-                    case OR:
-                        boolean allAtomic = true;
-                        int andMark = -1;
-                        List<Integer> orMarkIndex = new ArrayList<>();
-                        Set<Sentence> orSentences = new HashSet<>();
-                        Set<Sentence> andSentence = new HashSet<>();
-                        for (int i = 0; i < clauses.length; i++) {
-                            if (clauses[i] instanceof ComplexSentence) {
-                                ComplexSentence subSentence = (ComplexSentence) clauses[i];
-                                Sentence[] subClauses;
-                                if (subSentence.getConnective().equals(Connective.OR)) {
-                                    subClauses = subSentence.getClauses().toArray(new Sentence[0]);
-                                    orSentences.addAll(Arrays.asList(subClauses));
-                                    orMarkIndex.add(i);
-                                } else if (subSentence.getConnective().equals(Connective.AND)) {
-                                    allAtomic = false;
-                                    andMark = i;
-                                    subClauses = subSentence.getClauses().toArray(new Sentence[0]);
-                                    for (Sentence subClause : subClauses) {
-                                        if (!subClause.equals(clauses[clauses.length - 1 - i])) {
-                                            andSentence.add(OR(subClause, clauses[clauses.length - 1 - i]));
-                                        } else {
-                                            andSentence.add(subClause);
+                            beforeConvert.remove(s);
+                            break;
+                        case OR:
+                            boolean allAtomic = true;
+                            int andMark = -1;
+                            List<Integer> orMarkIndex = new ArrayList<>();
+                            Set<Sentence> orSentences = new HashSet<>();
+                            Set<Sentence> andSentence = new HashSet<>();
+                            for (int i = 0; i < clauses.length; i++) {
+                                if (clauses[i] instanceof ComplexSentence) {
+                                    ComplexSentence subSentence = (ComplexSentence) clauses[i];
+                                    Sentence[] subClauses;
+                                    if (subSentence.getConnective().equals(Connective.OR)) {
+                                        subClauses = subSentence.getClauses().toArray(new Sentence[0]);
+                                        orSentences.addAll(Arrays.asList(subClauses));
+                                        orMarkIndex.add(i);
+                                    } else if (subSentence.getConnective().equals(Connective.AND)) {
+                                        allAtomic = false;
+                                        andMark = i;
+                                        subClauses = subSentence.getClauses().toArray(new Sentence[0]);
+                                        for (Sentence subClause : subClauses) {
+                                            if (!subClause.equals(clauses[clauses.length - 1 - i])) {
+                                                andSentence.add(OR(subClause, clauses[clauses.length - 1 - i]));
+                                            } else {
+                                                andSentence.add(subClause);
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                        if (!allAtomic) {
-                            Sentence andOrSentence = AND(andSentence.toArray(new Sentence[0]));
-                            Set<Sentence> orAndSentence = new HashSet<>();
-                            beforeConvert.remove(s);
-                            if (clauses.length == 2) {
-                                beforeConvert.add(andOrSentence);
-                            } else {
-                                for (int i = 0; i < clauses.length; i++) {
-                                    if (!(i == andMark) && !(i == clauses.length - 1 - andMark)) {
-                                        orAndSentence.add(clauses[i]);
+                            if (!allAtomic) {
+                                Sentence andOrSentence = AND(andSentence.toArray(new Sentence[0]));
+                                Set<Sentence> orAndSentence = new HashSet<>();
+                                beforeConvert.remove(s);
+                                if (clauses.length == 2) {
+                                    beforeConvert.add(andOrSentence);
+                                } else {
+                                    for (int i = 0; i < clauses.length; i++) {
+                                        if (!(i == andMark) && !(i == clauses.length - 1 - andMark)) {
+                                            orAndSentence.add(clauses[i]);
+                                        }
                                     }
+                                    orAndSentence.add(andOrSentence);
+                                    Sentence newSentence = OR(orAndSentence.toArray(new Sentence[0]));
+                                    beforeConvert.add(newSentence);
                                 }
-                                orAndSentence.add(andOrSentence);
-                                Sentence newSentence = OR(orAndSentence.toArray(new Sentence[0]));
-                                beforeConvert.add(newSentence);
-                            }
-                        } else {
-                            if (orMarkIndex.isEmpty()) {
-                                afterConvert.add(s);
                             } else {
-                                for (int i = 0; i < clauses.length; i++) {
-                                    if (!orMarkIndex.contains(i)) {
-                                        orSentences.add(clauses[i]);
+                                if (orMarkIndex.isEmpty()) {
+                                    afterConvert.add(s);
+                                } else {
+                                    for (int i = 0; i < clauses.length; i++) {
+                                        if (!orMarkIndex.contains(i)) {
+                                            orSentences.add(clauses[i]);
+                                        }
                                     }
+                                    beforeConvert.add(OR(orSentences.toArray(new Sentence[0])));
                                 }
-                                beforeConvert.add(OR(orSentences.toArray(new Sentence[0])));
+                                beforeConvert.remove(s);
                             }
-                            beforeConvert.remove(s);
-                        }
+                    }
                 }
-            } else {
+            }
+            if (isNegateSentence) {
                 beforeConvert.remove(s);
                 afterConvert.add(s);
             }

@@ -285,15 +285,26 @@ public class PLAlgorithms {
 
             @Override
             public boolean entails(PLKnowledgeBase kb, Sentence... sentences) {
-                if (sentences.length > 1) throw new IllegalArgumentException("too many sentences > 1");
-                checkClauses(sentences);
-                resolvents = new HashSet<Sentence>(kb.sentences) {{
-                    for (Sentence sentence : sentences) {
-                        Set<Sentence> negatedSentences = negate(sentence);
-                        addAll(negatedSentences);
+                Set<Sentence> kbSentences = kb.list();
+                try {
+                    checkClauses(kbSentences.toArray(new Sentence[0]));
+                } catch (IllegalArgumentException e) {
+                    if (kbSentences.size() > 1) {
+                        kbSentences = SentenceUtil.convertToCNF(ComplexSentence.AND(kbSentences.toArray(new Sentence[0])));
+                    } else {
+                        kbSentences = SentenceUtil.convertToCNF(kbSentences.iterator().next());
+                    }
+                    checkClauses(kbSentences.toArray(new Sentence[0]));
+                    System.err.println("warn: invalid KnowledgeBase for resolution, auto-converted to CNF KnowledgeBase");
+                }
+
+                resolvents = new HashSet<Sentence>(kbSentences) {{
+                    if (sentences.length > 1) {
+                        addAll(SentenceUtil.convertToCNF(ComplexSentence.NOT(ComplexSentence.AND(sentences))));
+                    } else {
+                        addAll(SentenceUtil.convertToCNF(ComplexSentence.NOT(sentences[0])));
                     }
                 }};
-                checkClauses(resolvents.toArray(new Sentence[0]));
 
                 while (kb.size() > 0) {
                     if (DEBUG) System.out.println(resolvents);
@@ -381,33 +392,6 @@ public class PLAlgorithms {
                         } else {
                             return ComplexSentence.OR(set.toArray(new Sentence[0]));
                         }
-                }
-            }
-
-            private Set<Sentence> negate(Sentence DNF) {
-                if (DNF instanceof AtomicSentence) {
-                    return new HashSet<Sentence>() {{
-                        add(ComplexSentence.NOT(DNF));
-                    }};
-                } else {
-                    Connective conn = ((ComplexSentence) DNF).getConnective();
-                    Set<Sentence> sentences = ((ComplexSentence) DNF).getClauses();
-                    if (conn.equals(Connective.NOT)) return sentences;
-                    Set<Sentence> negate = new LinkedHashSet<>();
-                    Set<Sentence> negated = new LinkedHashSet<>();
-                    for (Sentence s : sentences) {
-                        if (s instanceof AtomicSentence) {
-                            negated.add(new ComplexSentence(Connective.NOT, s));
-                        } else {
-                            negated.add(((ComplexSentence) s).getClauses().iterator().next());
-                        }
-                    }
-                    if (conn.equals(Connective.AND)) {
-                        negate.add(new ComplexSentence(Connective.OR, negated.toArray(new Sentence[0])));
-                        return negate;
-                    } else {
-                        return negated;
-                    }
                 }
             }
 
