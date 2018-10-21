@@ -328,7 +328,6 @@ public class PLAlgorithms {
                         return false;
                     }
                     resolvents.addAll(newResolvents);
-                    System.out.println(newResolvents.size());
                 }
                 return true;
             }
@@ -396,6 +395,9 @@ public class PLAlgorithms {
                             // single sentence remained after deduplicate
                             return set.iterator().next();
                         } else {
+                            if (set.size() > Math.max(clause1.size(), clause2.size())) {
+                                return null;
+                            }
                             for (Sentence s : set) {
                                 if (set.contains(ComplexSentence.NOT(s))) return null;
                             }

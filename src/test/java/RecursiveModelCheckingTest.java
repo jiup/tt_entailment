@@ -74,9 +74,12 @@ public class RecursiveModelCheckingTest {
         AtomicSentence y = new AtomicSentence("Y");
         AtomicSentence z = new AtomicSentence("Z");
         AtomicSentence w = new AtomicSentence("W");
-        Assert.assertTrue(RecursiveModelChecking.entails(KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(), x));
-        Assert.assertFalse(RecursiveModelChecking.entails(KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(), y));
-        Assert.assertFalse(RecursiveModelChecking.entails(KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(), z));
-        Assert.assertFalse(RecursiveModelChecking.entails(KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(), w));
+
+        Assert.assertTrue(RecursiveModelChecking.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), x));
+        Assert.assertFalse(RecursiveModelChecking.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), y));
+        Assert.assertFalse(RecursiveModelChecking.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), z));
+        Assert.assertFalse(RecursiveModelChecking.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), w));
+
+        Assert.assertTrue(RecursiveModelChecking.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), x));
     }
 }

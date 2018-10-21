@@ -10,7 +10,6 @@ import util.propositional.SentenceUtil;
  * @since 10/20/2018
  */
 public class CNFConversionTest {
-
     @Test
     public void testExampleKnowledgeBase() {
         PLKnowledgeBase kb = KnowledgeBases.exampleKnowledgeBase(true);
@@ -68,9 +67,9 @@ public class CNFConversionTest {
     }
 
     @Test
-    public void testDoorsOfEnlightenmentKnowledgeBase() {
-        PLKnowledgeBase kb = KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(true);
-        PLKnowledgeBase kb0 = KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(false);
+    public void testDoorsOfEnlightenmentKnowledgeBase() { // TODO
+        PLKnowledgeBase kb = KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(true);
+        PLKnowledgeBase kb0 = KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(false);
         Sentence sentence = ComplexSentence.AND(kb0.list().toArray(new Sentence[0]));
         Assert.assertEquals(kb.list(), SentenceUtil.convertToCNF(sentence));
     }

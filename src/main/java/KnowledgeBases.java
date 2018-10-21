@@ -36,8 +36,12 @@ public class KnowledgeBases {
         return liarsAndTruthTellers3KnowledgeBase(false);
     }
 
-    public static PLKnowledgeBase doorsOfEnlightenmentKnowledgeBase() {
-        return doorsOfEnlightenmentKnowledgeBase(false);
+    public static PLKnowledgeBase doorsOfEnlightenment1KnowledgeBase() {
+        return doorsOfEnlightenment1KnowledgeBase(false);
+    }
+
+    public static PLKnowledgeBase doorsOfEnlightenment2KnowledgeBase() {
+        return doorsOfEnlightenment2KnowledgeBase(false);
     }
 
     public static PLKnowledgeBase exampleKnowledgeBase(boolean CNF) {
@@ -238,21 +242,21 @@ public class KnowledgeBases {
         return knowledgeBase;
     }
 
-    public static PLKnowledgeBase doorsOfEnlightenmentKnowledgeBase(boolean CNF) {
+    public static PLKnowledgeBase doorsOfEnlightenment1KnowledgeBase(boolean CNF) {
+        PLKnowledgeBase knowledgeBase = new PLKnowledgeBase();
+        AtomicSentence x = new AtomicSentence("X");
+        AtomicSentence y = new AtomicSentence("Y");
+        AtomicSentence z = new AtomicSentence("Z");
+        AtomicSentence w = new AtomicSentence("W");
+        AtomicSentence a = new AtomicSentence("A");
+        AtomicSentence b = new AtomicSentence("B");
+        AtomicSentence c = new AtomicSentence("C");
+        AtomicSentence d = new AtomicSentence("D");
+        AtomicSentence e = new AtomicSentence("E");
+        AtomicSentence f = new AtomicSentence("F");
+        AtomicSentence g = new AtomicSentence("G");
+        AtomicSentence h = new AtomicSentence("H");
         if (CNF) {
-            PLKnowledgeBase knowledgeBase = new PLKnowledgeBase();
-            AtomicSentence x = new AtomicSentence("X");
-            AtomicSentence y = new AtomicSentence("Y");
-            AtomicSentence z = new AtomicSentence("Z");
-            AtomicSentence w = new AtomicSentence("W");
-            AtomicSentence a = new AtomicSentence("A");
-            AtomicSentence b = new AtomicSentence("B");
-            AtomicSentence c = new AtomicSentence("C");
-            AtomicSentence d = new AtomicSentence("D");
-            AtomicSentence e = new AtomicSentence("E");
-            AtomicSentence f = new AtomicSentence("F");
-            AtomicSentence g = new AtomicSentence("G");
-            AtomicSentence h = new AtomicSentence("H");
             knowledgeBase.insert(OR(x, y, z, w));
             knowledgeBase.insert(OR(a, NOT(c)));
             knowledgeBase.insert(OR(b, NOT(c)));
@@ -284,21 +288,7 @@ public class KnowledgeBases {
             knowledgeBase.insert(OR(NOT(f), d, e));
             knowledgeBase.insert(OR(g, h));
             knowledgeBase.insert(OR(NOT(x), e, NOT(z)));
-            return knowledgeBase;
         } else {
-            AtomicSentence x = new AtomicSentence("X");
-            AtomicSentence y = new AtomicSentence("Y");
-            AtomicSentence z = new AtomicSentence("Z");
-            AtomicSentence w = new AtomicSentence("W");
-            AtomicSentence a = new AtomicSentence("A");
-            AtomicSentence b = new AtomicSentence("B");
-            AtomicSentence c = new AtomicSentence("C");
-            AtomicSentence d = new AtomicSentence("D");
-            AtomicSentence e = new AtomicSentence("E");
-            AtomicSentence f = new AtomicSentence("F");
-            AtomicSentence g = new AtomicSentence("G");
-            AtomicSentence h = new AtomicSentence("H");
-            PLKnowledgeBase knowledgeBase = new PLKnowledgeBase();
             knowledgeBase.insert(BI_IMPLIES(a, x));
             knowledgeBase.insert(BI_IMPLIES(b, OR(y, z)));
             knowledgeBase.insert(BI_IMPLIES(c, AND(a, b)));
@@ -308,7 +298,29 @@ public class KnowledgeBases {
             knowledgeBase.insert(BI_IMPLIES(g, IMPLIES(c, f)));
             knowledgeBase.insert(BI_IMPLIES(h, IMPLIES(AND(g, h), a)));
             knowledgeBase.insert(OR(x, y, z, w));
-            return knowledgeBase;
         }
+        return knowledgeBase;
+    }
+
+    public static PLKnowledgeBase doorsOfEnlightenment2KnowledgeBase(boolean CNF) {
+        PLKnowledgeBase knowledgeBase = new PLKnowledgeBase();
+        AtomicSentence x = new AtomicSentence("X");
+        AtomicSentence y = new AtomicSentence("Y");
+        AtomicSentence z = new AtomicSentence("Z");
+        AtomicSentence w = new AtomicSentence("W");
+        AtomicSentence a = new AtomicSentence("A");
+        AtomicSentence c = new AtomicSentence("C");
+        AtomicSentence g = new AtomicSentence("G");
+        AtomicSentence h = new AtomicSentence("H");
+        if (CNF) {
+            //...
+        } else {
+            knowledgeBase.insert(BI_IMPLIES(a, x));
+            knowledgeBase.insert(BI_IMPLIES(c, OR(AND(a, NOT(g), NOT(h)), AND(NOT(a), g, NOT(h)), AND(NOT(a), NOT(g), h))));
+            knowledgeBase.insert(BI_IMPLIES(g, IMPLIES(c, OR(a, g, h))));
+            knowledgeBase.insert(BI_IMPLIES(h, IMPLIES(AND(g, h), a)));
+//            knowledgeBase.insert(OR(x, y, z, w));
+        }
+        return knowledgeBase;
     }
 }
