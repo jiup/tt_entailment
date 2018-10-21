@@ -30,19 +30,19 @@ public class ResolutionTest {
     public void testExample() {
         AtomicSentence w12 = new AtomicSentence("W12");
         AtomicSentence w21 = new AtomicSentence("W21");
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.exampleKnowledgeBase(true), NOT(w12), NOT(w21))); // TODO
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.exampleKnowledgeBase(), NOT(w12), NOT(w21)));
     }
 
     @Test
     public void testModusPonens() {
         AtomicSentence q = new AtomicSentence("Q");
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.modusPonensKnowledgeBase(true), q));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.modusPonensKnowledgeBase(), q));
     }
 
     @Test
     public void testSimpleWumpusWorld() {
         AtomicSentence p12 = new AtomicSentence("P12");
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.wumpusWorldKnowledgeBase(true), NOT(p12)));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.wumpusWorldKnowledgeBase(), NOT(p12)));
     }
 
     @Test
@@ -50,9 +50,9 @@ public class ResolutionTest {
         AtomicSentence mythical = new AtomicSentence("mythical");
         AtomicSentence magical = new AtomicSentence("magical");
         AtomicSentence horned = new AtomicSentence("horned");
-        Assert.assertFalse(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(true), mythical));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(true), magical));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(true), horned));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(), mythical));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(), magical));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(), horned));
     }
 
     @Test
@@ -61,13 +61,13 @@ public class ResolutionTest {
         AtomicSentence bob = new AtomicSentence("Bob");
         AtomicSentence cal = new AtomicSentence("Cal");
 
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(true), NOT(amy)));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(true), NOT(bob)));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(true), cal));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(), NOT(amy)));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(), NOT(bob)));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(), cal));
 
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(true), amy));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(true), NOT(bob)));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(true), NOT(cal)));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(), amy));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(), NOT(bob)));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(), NOT(cal)));
     }
 
     @Test
@@ -84,18 +84,19 @@ public class ResolutionTest {
         AtomicSentence Jay = new AtomicSentence("Jay");
         AtomicSentence Kay = new AtomicSentence("Kay");
         AtomicSentence Lee = new AtomicSentence("Lee");
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(true), NOT(Amy)));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(true), NOT(Bob)));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(true), NOT(Cal)));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(true), NOT(Dee)));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(true), NOT(Eli)));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(true), NOT(Fay)));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(true), NOT(Gil)));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(true), NOT(Hal)));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(true), NOT(Ida)));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(true), Jay));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(true), Kay));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(true), NOT(Lee)));
+
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), NOT(Amy)));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), NOT(Bob)));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), NOT(Cal)));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), NOT(Dee)));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), NOT(Eli)));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), NOT(Fay)));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), NOT(Gil)));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), NOT(Hal)));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), NOT(Ida)));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), Jay));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), Kay));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), NOT(Lee)));
     }
 
     @Test
@@ -106,10 +107,21 @@ public class ResolutionTest {
         AtomicSentence w = new AtomicSentence("W");
 
         Assert.assertTrue(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), x));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), y));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), NOT(x)));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), y));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), NOT(y)));
         Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), z));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), NOT(z)));
         Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), w));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), NOT(w)));
 
         Assert.assertTrue(Resolution.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), x));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), NOT(x)));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), y));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), NOT(y)));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), z));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), NOT(z)));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), w));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), NOT(w)));
     }
 }

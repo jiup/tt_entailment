@@ -26,11 +26,9 @@ public class SentenceUtil {
         return symbols;
     }
 
-    // TODO DEBUG
+    @SuppressWarnings("ConstantConditions")
     private static Set<Sentence> convertToCNF(Set<Sentence> beforeConvert, Set<Sentence> afterConvert) {
-        System.out.println(beforeConvert.size() + ", " + afterConvert.size());
         if (beforeConvert.isEmpty()) {
-            System.out.println("!");
             return afterConvert;
         }
         Set<Sentence> tmpBefore = new HashSet<>(beforeConvert);
@@ -59,6 +57,7 @@ public class SentenceUtil {
                         case OR:
                             boolean allAtomic = true;
                             int andMark = -1;
+                            int andMark2 = -1;
                             int isNegateClauses = 0;
                             List<Integer> orMarkIndex = new ArrayList<>();
                             Map<Integer, Set<Sentence>> orSentences = new HashMap<>();
@@ -76,11 +75,22 @@ public class SentenceUtil {
                                         andMark = i;
                                         subClauses = subSentence.getClauses();
                                         for (Sentence subClause : subClauses) {
-                                            if (!subClause.equals(clauses[clauses.length - 1 - i])) {
-                                                andSentence.add(OR(subClause, clauses[clauses.length - 1 - i]));
+                                            if (i < clauses.length - 1) {
+                                                andMark2 = i + 1;
+                                                if (!subClause.equals(clauses[i + 1])) {
+                                                    andSentence.add(OR(subClause, clauses[i + 1]));
+                                                } else {
+                                                    andSentence.add(clauses[i + 1]);
+                                                }
                                             } else {
-                                                andSentence.add(clauses[clauses.length - 1 - i]);
+                                                andMark2 = i - 1;
+                                                if (!subClause.equals(clauses[i - 1])) {
+                                                    andSentence.add(OR(subClause, clauses[i - 1]));
+                                                } else {
+                                                    andSentence.add(clauses[i - 1]);
+                                                }
                                             }
+
                                         }
                                     } else {
                                         isNegateClauses += 1;
@@ -93,14 +103,14 @@ public class SentenceUtil {
                             Set<Sentence> toAdd = new HashSet<>();
                             if (!orMarkIndex.isEmpty()) {
                                 for (int i = 0; i < clauses.length; i++) {
-                                    if (orMarkIndex.contains(i) && !(i == clauses.length - 1 - andMark)) {
+                                    if (orMarkIndex.contains(i) && !(i == andMark2)) {
                                         toAdd.addAll(orSentences.get(i));
                                     }
                                 }
                             }
 
                             for (int i = 0; i < clauses.length; i++) {
-                                if (!((orMarkIndex.contains(i)) || (i == andMark) || (i == clauses.length - 1 - andMark))) {
+                                if (!((orMarkIndex.contains(i)) || (i == andMark) || (i == andMark2))) {
                                     toAdd.add(clauses[i]);
                                 }
                             }

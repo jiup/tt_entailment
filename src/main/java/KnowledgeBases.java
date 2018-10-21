@@ -36,10 +36,6 @@ public class KnowledgeBases {
         return liarsAndTruthTellers3KnowledgeBase(false);
     }
 
-    public static PLKnowledgeBase doorsOfEnlightenment1KnowledgeBase() {
-        return doorsOfEnlightenment1KnowledgeBase(false);
-    }
-
     public static PLKnowledgeBase exampleKnowledgeBase(boolean CNF) {
         PLKnowledgeBase knowledgeBase = new PLKnowledgeBase();
         AtomicSentence at11 = new AtomicSentence("At11");
@@ -238,7 +234,7 @@ public class KnowledgeBases {
         return knowledgeBase;
     }
 
-    public static PLKnowledgeBase doorsOfEnlightenment1KnowledgeBase(boolean CNF) {
+    public static PLKnowledgeBase doorsOfEnlightenment1KnowledgeBase() {
         PLKnowledgeBase knowledgeBase = new PLKnowledgeBase();
         AtomicSentence x = new AtomicSentence("X");
         AtomicSentence y = new AtomicSentence("Y");
@@ -252,49 +248,15 @@ public class KnowledgeBases {
         AtomicSentence f = new AtomicSentence("F");
         AtomicSentence g = new AtomicSentence("G");
         AtomicSentence h = new AtomicSentence("H");
-        if (CNF) {
-            knowledgeBase.insert(OR(x, y, z, w));
-            knowledgeBase.insert(OR(a, NOT(c)));
-            knowledgeBase.insert(OR(b, NOT(c)));
-            knowledgeBase.insert(OR(NOT(a), h));
-            knowledgeBase.insert(OR(d, NOT(e)));
-            knowledgeBase.insert(OR(NOT(f), g));
-            knowledgeBase.insert(OR(y, z, NOT(b)));
-            knowledgeBase.insert(d);
-            knowledgeBase.insert(OR(NOT(y), b));
-            knowledgeBase.insert(OR(NOT(g), f, NOT(c)));
-            knowledgeBase.insert(OR(a, NOT(g), NOT(h)));
-            knowledgeBase.insert(OR(NOT(z), b));
-            knowledgeBase.insert(OR(x, NOT(d)));
-            knowledgeBase.insert(OR(NOT(e), NOT(f), e));
-            knowledgeBase.insert(OR(NOT(a), x));
-            knowledgeBase.insert(OR(NOT(x), a));
-            knowledgeBase.insert(h);
-            knowledgeBase.insert(OR(NOT(f), d, NOT(d)));
-            knowledgeBase.insert(OR(z, NOT(e)));
-            knowledgeBase.insert(OR(y, NOT(d)));
-            knowledgeBase.insert(OR(x, NOT(e)));
-            knowledgeBase.insert(OR(c, NOT(a), NOT(b)));
-            knowledgeBase.insert(NOT(e));
-            knowledgeBase.insert(OR(NOT(e), NOT(f), NOT(d)));
-            knowledgeBase.insert(OR(NOT(x), d, NOT(y)));
-            knowledgeBase.insert(OR(c, g));
-            knowledgeBase.insert(OR(e, f, NOT(d)));
-            knowledgeBase.insert(OR(NOT(e), d, f));
-            knowledgeBase.insert(OR(NOT(f), d, e));
-            knowledgeBase.insert(OR(g, h));
-            knowledgeBase.insert(OR(NOT(x), e, NOT(z)));
-        } else {
-            knowledgeBase.insert(BI_IMPLIES(a, x));
-            knowledgeBase.insert(BI_IMPLIES(b, OR(y, z)));
-            knowledgeBase.insert(BI_IMPLIES(c, AND(a, b)));
-            knowledgeBase.insert(BI_IMPLIES(d, AND(x, y)));
-            knowledgeBase.insert(BI_IMPLIES(e, AND(x, z)));
-            knowledgeBase.insert(BI_IMPLIES(f, OR(AND(d, NOT(e)), AND(NOT(d), e))));
-            knowledgeBase.insert(BI_IMPLIES(g, IMPLIES(c, f)));
-            knowledgeBase.insert(BI_IMPLIES(h, IMPLIES(AND(g, h), a)));
-            knowledgeBase.insert(OR(x, y, z, w));
-        }
+        knowledgeBase.insert(BI_IMPLIES(a, x));
+        knowledgeBase.insert(BI_IMPLIES(b, OR(y, z)));
+        knowledgeBase.insert(BI_IMPLIES(c, AND(a, b)));
+        knowledgeBase.insert(BI_IMPLIES(d, AND(x, y)));
+        knowledgeBase.insert(BI_IMPLIES(e, AND(x, z)));
+        knowledgeBase.insert(BI_IMPLIES(f, OR(AND(d, NOT(e)), AND(NOT(d), e))));
+        knowledgeBase.insert(BI_IMPLIES(g, IMPLIES(c, f)));
+        knowledgeBase.insert(BI_IMPLIES(h, IMPLIES(AND(g, h), a)));
+        knowledgeBase.insert(OR(x, y, z, w));
         return knowledgeBase;
     }
 

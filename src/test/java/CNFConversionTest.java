@@ -65,12 +65,4 @@ public class CNFConversionTest {
         Sentence sentence = ComplexSentence.AND(kb0.list().toArray(new Sentence[0]));
         Assert.assertEquals(kb.list(), SentenceUtil.convertToCNF(sentence));
     }
-
-    @Test
-    public void testDoorsOfEnlightenmentKnowledgeBase() { // TODO
-        PLKnowledgeBase kb = KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(true);
-        PLKnowledgeBase kb0 = KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(false);
-        Sentence sentence = ComplexSentence.AND(kb0.list().toArray(new Sentence[0]));
-        Assert.assertEquals(kb.list(), SentenceUtil.convertToCNF(sentence));
-    }
 }
