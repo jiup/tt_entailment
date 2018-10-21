@@ -2,7 +2,6 @@ import domain.propositional.ComplexSentence;
 import domain.propositional.Sentence;
 import knowledgebase.PLKnowledgeBase;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import util.propositional.SentenceUtil;
 
@@ -11,6 +10,7 @@ import util.propositional.SentenceUtil;
  * @since 10/20/2018
  */
 public class CNFConversionTest {
+
     @Test
     public void testExampleKnowledgeBase() {
         PLKnowledgeBase kb = KnowledgeBases.exampleKnowledgeBase(true);
@@ -44,13 +44,6 @@ public class CNFConversionTest {
     }
 
     @Test
-    @Ignore
-    /*
-     * Expected :[¬Cal, (¬Amy ∨ Cal), (Cal ∨ Bob), (¬Cal ∨ ¬Bob), (¬Bob ∨ Cal), (Cal ∨ Amy), (¬Cal ∨ Bob ∨ ¬Amy)]
-     * Actual   :[(Cal ∨ Bob), (¬Cal ∨ Amy ∨ ¬Amy), (¬Bob ∨ ¬Cal), (Cal ∨ ¬Amy), (Amy ∨ ¬Amy), (Bob ∨ ¬Cal ∨ ¬Amy), (Amy ∨ Cal), (¬Bob ∨ Cal)]
-     *
-     * kb0 did partial resolution: (¬Cal ∨ Amy ∨ ¬Amy) <=> ¬Cal, (Amy ∨ ¬Amy) <=> NULL
-     */
     public void testLiarsAndTruthTellers1KnowledgeBase() {
         PLKnowledgeBase kb = KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(true);
         PLKnowledgeBase kb0 = KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(false);
@@ -75,7 +68,6 @@ public class CNFConversionTest {
     }
 
     @Test
-    @Ignore
     public void testDoorsOfEnlightenmentKnowledgeBase() {
         PLKnowledgeBase kb = KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(true);
         PLKnowledgeBase kb0 = KnowledgeBases.doorsOfEnlightenmentKnowledgeBase(false);

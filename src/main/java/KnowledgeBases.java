@@ -133,13 +133,14 @@ public class KnowledgeBases {
         AtomicSentence Bob = new AtomicSentence("Bob");
         AtomicSentence Cal = new AtomicSentence("Cal");
         if (CNF) {
-            knowledgeBase.insert(NOT(Cal));
-            knowledgeBase.insert(OR(NOT(Amy), Cal));
             knowledgeBase.insert(OR(Cal, Bob));
-            knowledgeBase.insert(OR(NOT(Cal), NOT(Bob)));
-            knowledgeBase.insert(OR(NOT(Bob), Cal));
+            knowledgeBase.insert(OR(NOT(Cal), Amy, NOT(Amy)));
+            knowledgeBase.insert(OR(NOT(Bob), NOT(Cal)));
+            knowledgeBase.insert(OR(Cal, NOT(Amy)));
+            knowledgeBase.insert(OR(Amy, NOT(Amy)));
+            knowledgeBase.insert(OR(Bob, NOT(Cal), NOT(Amy)));
             knowledgeBase.insert(OR(Cal, Amy));
-            knowledgeBase.insert(OR(NOT(Cal), Bob, NOT(Amy)));
+            knowledgeBase.insert(OR(NOT(Bob), Cal));
         } else {
             knowledgeBase.insert(BI_IMPLIES(Amy, AND(Amy, Cal)));
             knowledgeBase.insert(BI_IMPLIES(Bob, NOT(Cal)));
@@ -238,20 +239,20 @@ public class KnowledgeBases {
     }
 
     public static PLKnowledgeBase doorsOfEnlightenmentKnowledgeBase(boolean CNF) {
-        PLKnowledgeBase knowledgeBase = new PLKnowledgeBase();
-        AtomicSentence x = new AtomicSentence("X");
-        AtomicSentence y = new AtomicSentence("Y");
-        AtomicSentence z = new AtomicSentence("Z");
-        AtomicSentence w = new AtomicSentence("W");
-        AtomicSentence a = new AtomicSentence("A");
-        AtomicSentence b = new AtomicSentence("B");
-        AtomicSentence c = new AtomicSentence("C");
-        AtomicSentence d = new AtomicSentence("D");
-        AtomicSentence e = new AtomicSentence("E");
-        AtomicSentence f = new AtomicSentence("F");
-        AtomicSentence g = new AtomicSentence("G");
-        AtomicSentence h = new AtomicSentence("H");
         if (CNF) {
+            PLKnowledgeBase knowledgeBase = new PLKnowledgeBase();
+            AtomicSentence x = new AtomicSentence("X");
+            AtomicSentence y = new AtomicSentence("Y");
+            AtomicSentence z = new AtomicSentence("Z");
+            AtomicSentence w = new AtomicSentence("W");
+            AtomicSentence a = new AtomicSentence("A");
+            AtomicSentence b = new AtomicSentence("B");
+            AtomicSentence c = new AtomicSentence("C");
+            AtomicSentence d = new AtomicSentence("D");
+            AtomicSentence e = new AtomicSentence("E");
+            AtomicSentence f = new AtomicSentence("F");
+            AtomicSentence g = new AtomicSentence("G");
+            AtomicSentence h = new AtomicSentence("H");
             knowledgeBase.insert(OR(x, y, z, w));
             knowledgeBase.insert(OR(a, NOT(c)));
             knowledgeBase.insert(OR(b, NOT(c)));
@@ -283,7 +284,21 @@ public class KnowledgeBases {
             knowledgeBase.insert(OR(NOT(f), d, e));
             knowledgeBase.insert(OR(g, h));
             knowledgeBase.insert(OR(NOT(x), e, NOT(z)));
+            return knowledgeBase;
         } else {
+            AtomicSentence x = new AtomicSentence("X");
+            AtomicSentence y = new AtomicSentence("Y");
+            AtomicSentence z = new AtomicSentence("Z");
+            AtomicSentence w = new AtomicSentence("W");
+            AtomicSentence a = new AtomicSentence("A");
+            AtomicSentence b = new AtomicSentence("B");
+            AtomicSentence c = new AtomicSentence("C");
+            AtomicSentence d = new AtomicSentence("D");
+            AtomicSentence e = new AtomicSentence("E");
+            AtomicSentence f = new AtomicSentence("F");
+            AtomicSentence g = new AtomicSentence("G");
+            AtomicSentence h = new AtomicSentence("H");
+            PLKnowledgeBase knowledgeBase = new PLKnowledgeBase();
             knowledgeBase.insert(BI_IMPLIES(a, x));
             knowledgeBase.insert(BI_IMPLIES(b, OR(y, z)));
             knowledgeBase.insert(BI_IMPLIES(c, AND(a, b)));
@@ -293,7 +308,7 @@ public class KnowledgeBases {
             knowledgeBase.insert(BI_IMPLIES(g, IMPLIES(c, f)));
             knowledgeBase.insert(BI_IMPLIES(h, IMPLIES(AND(g, h), a)));
             knowledgeBase.insert(OR(x, y, z, w));
+            return knowledgeBase;
         }
-        return knowledgeBase;
     }
 }

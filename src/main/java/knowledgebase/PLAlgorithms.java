@@ -15,6 +15,7 @@ import java.util.*;
 public class PLAlgorithms {
     private static final boolean DEBUG = false;
 
+    @SuppressWarnings("Duplicates")
     public enum Entailment implements EntailCheckStrategies {
         ModelChecking {
             private boolean[][] truthTable;
@@ -324,6 +325,7 @@ public class PLAlgorithms {
                     if (resolvents.containsAll(newResolvents)) {
                         return false;
                     }
+                    System.out.println(newResolvents.size());
                     resolvents.addAll(newResolvents);
                 }
                 return true;
@@ -358,13 +360,15 @@ public class PLAlgorithms {
                         if (c1 instanceof ComplexSentence && c2 instanceof AtomicSentence) {
                             ComplexSentence negateSentence = (ComplexSentence) c1;
                             if (((ComplexSentence) c1).getClauses().contains(c2)) {
-                                combination.add(combine(sentences1, sentences2, (AtomicSentence) c2));
+                                Sentence s = combine(sentences1, sentences2, (AtomicSentence) c2);
+                                if (s != null) combination.add(s);
                             }
                         }
                         if (c2 instanceof ComplexSentence && c1 instanceof AtomicSentence) {
                             ComplexSentence negateSentence = (ComplexSentence) c2;
                             if (((ComplexSentence) c2).getClauses().contains(c1)) {
-                                combination.add(combine(sentences1, sentences2, (AtomicSentence) c1));
+                                Sentence s = combine(sentences1, sentences2, (AtomicSentence) c1);
+                                if (s != null) combination.add(s);
                             }
                         }
                     }
@@ -390,6 +394,9 @@ public class PLAlgorithms {
                             // single sentence remained after deduplicate
                             return set.iterator().next();
                         } else {
+                            for (Sentence s : set) {
+                                if (set.contains(ComplexSentence.NOT(s))) return null;
+                            }
                             return ComplexSentence.OR(set.toArray(new Sentence[0]));
                         }
                 }
