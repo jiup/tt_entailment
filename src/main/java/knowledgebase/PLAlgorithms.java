@@ -299,7 +299,8 @@ public class PLAlgorithms {
                     System.err.println("warn: invalid KnowledgeBase for resolution, auto-converted to CNF KnowledgeBase");
                 }
 
-                resolvents = new HashSet<Sentence>(kbSentences) {{
+                resolvents = new HashSet<>(kbSentences);
+                Set<Sentence> newResolvents = new HashSet<Sentence>() {{
                     if (sentences.length > 1) {
                         addAll(SentenceUtil.convertToCNF(ComplexSentence.NOT(ComplexSentence.AND(sentences))));
                     } else {
@@ -310,11 +311,12 @@ public class PLAlgorithms {
                 while (kb.size() > 0) {
                     if (DEBUG) System.out.println(resolvents);
                     Sentence[] clauses = resolvents.toArray(new Sentence[0]);
-                    Set<Sentence> newResolvents = new HashSet<>();
-                    for (int i = 0; i < clauses.length; i++) {
-                        for (int j = i + 1; j < clauses.length; j++) {
-                            if (DEBUG) System.out.println("resolve " + clauses[i] + ", " + clauses[j]);
-                            Set<Sentence> tmp = resolve(clauses[i], clauses[j]);
+                    Sentence[] newClauses = newResolvents.toArray(new Sentence[0]);
+                    newResolvents.clear();
+                    for (Sentence newClause : newClauses) {
+                        for (Sentence clause : clauses) {
+                            if (DEBUG) System.out.println("resolve " + newClause + ", " + clause);
+                            Set<Sentence> tmp = resolve(newClause, clause);
                             if (tmp.contains(EMPTY_CLAUSE)) {
                                 return true;
                             }
@@ -325,8 +327,8 @@ public class PLAlgorithms {
                     if (resolvents.containsAll(newResolvents)) {
                         return false;
                     }
-                    System.out.println(newResolvents.size());
                     resolvents.addAll(newResolvents);
+                    System.out.println(newResolvents.size());
                 }
                 return true;
             }
