@@ -105,11 +105,11 @@ public class ResolutionTest {
         AtomicSentence z = new AtomicSentence("Z");
         AtomicSentence w = new AtomicSentence("W");
 
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(true), x));
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(true), y));
-        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(true), z));
-        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(true), w));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), x));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), y));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), z));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), w));
 
-        Assert.assertTrue(Resolution.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(true), x));
+        Assert.assertTrue(Resolution.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), x));
     }
 }

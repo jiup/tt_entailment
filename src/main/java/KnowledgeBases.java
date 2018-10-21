@@ -40,10 +40,6 @@ public class KnowledgeBases {
         return doorsOfEnlightenment1KnowledgeBase(false);
     }
 
-    public static PLKnowledgeBase doorsOfEnlightenment2KnowledgeBase() {
-        return doorsOfEnlightenment2KnowledgeBase(false);
-    }
-
     public static PLKnowledgeBase exampleKnowledgeBase(boolean CNF) {
         PLKnowledgeBase knowledgeBase = new PLKnowledgeBase();
         AtomicSentence at11 = new AtomicSentence("At11");
@@ -302,7 +298,7 @@ public class KnowledgeBases {
         return knowledgeBase;
     }
 
-    public static PLKnowledgeBase doorsOfEnlightenment2KnowledgeBase(boolean CNF) {
+    public static PLKnowledgeBase doorsOfEnlightenment2KnowledgeBase() {
         PLKnowledgeBase knowledgeBase = new PLKnowledgeBase();
         AtomicSentence x = new AtomicSentence("X");
         AtomicSentence y = new AtomicSentence("Y");
@@ -312,15 +308,10 @@ public class KnowledgeBases {
         AtomicSentence c = new AtomicSentence("C");
         AtomicSentence g = new AtomicSentence("G");
         AtomicSentence h = new AtomicSentence("H");
-        if (CNF) {
-            //...
-        } else {
-            knowledgeBase.insert(BI_IMPLIES(a, x));
-            knowledgeBase.insert(BI_IMPLIES(c, OR(AND(a, NOT(g), NOT(h)), AND(NOT(a), g, NOT(h)), AND(NOT(a), NOT(g), h))));
-            knowledgeBase.insert(BI_IMPLIES(g, IMPLIES(c, OR(a, g, h))));
-            knowledgeBase.insert(BI_IMPLIES(h, IMPLIES(AND(g, h), a)));
-//            knowledgeBase.insert(OR(x, y, z, w));
-        }
+        knowledgeBase.insert(BI_IMPLIES(a, x));
+        knowledgeBase.insert(BI_IMPLIES(c, OR(AND(a, NOT(g), NOT(h)), AND(NOT(a), g, NOT(h)), AND(NOT(a), NOT(g), h))));
+        knowledgeBase.insert(BI_IMPLIES(g, IMPLIES(c, OR(a, g, h))));
+        knowledgeBase.insert(BI_IMPLIES(h, IMPLIES(AND(g, h), a)));
         return knowledgeBase;
     }
 }

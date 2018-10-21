@@ -26,8 +26,11 @@ public class SentenceUtil {
         return symbols;
     }
 
+    // TODO DEBUG
     private static Set<Sentence> convertToCNF(Set<Sentence> beforeConvert, Set<Sentence> afterConvert) {
+        System.out.println(beforeConvert.size() + ", " + afterConvert.size());
         if (beforeConvert.isEmpty()) {
+            System.out.println("!");
             return afterConvert;
         }
         Set<Sentence> tmpBefore = new HashSet<>(beforeConvert);
@@ -56,60 +59,79 @@ public class SentenceUtil {
                         case OR:
                             boolean allAtomic = true;
                             int andMark = -1;
+                            int isNegateClauses = 0;
                             List<Integer> orMarkIndex = new ArrayList<>();
-                            Set<Sentence> orSentences = new HashSet<>();
+                            Map<Integer, Set<Sentence>> orSentences = new HashMap<>();
                             Set<Sentence> andSentence = new HashSet<>();
                             for (int i = 0; i < clauses.length; i++) {
                                 if (clauses[i] instanceof ComplexSentence) {
                                     ComplexSentence subSentence = (ComplexSentence) clauses[i];
-                                    Sentence[] subClauses;
+                                    Set<Sentence> subClauses;
                                     if (subSentence.getConnective().equals(Connective.OR)) {
-                                        subClauses = subSentence.getClauses().toArray(new Sentence[0]);
-                                        orSentences.addAll(Arrays.asList(subClauses));
+                                        subClauses = subSentence.getClauses();
+                                        orSentences.put(i, subClauses);
                                         orMarkIndex.add(i);
-                                    } else if (subSentence.getConnective().equals(Connective.AND)) {
+                                    } else if (subSentence.getConnective().equals(Connective.AND) && allAtomic) {
                                         allAtomic = false;
                                         andMark = i;
-                                        subClauses = subSentence.getClauses().toArray(new Sentence[0]);
+                                        subClauses = subSentence.getClauses();
                                         for (Sentence subClause : subClauses) {
                                             if (!subClause.equals(clauses[clauses.length - 1 - i])) {
                                                 andSentence.add(OR(subClause, clauses[clauses.length - 1 - i]));
                                             } else {
-                                                andSentence.add(subClause);
+                                                andSentence.add(clauses[clauses.length - 1 - i]);
                                             }
                                         }
+                                    } else {
+                                        isNegateClauses += 1;
+                                    }
+                                } else {
+                                    isNegateClauses += 1;
+                                }
+                            }
+
+                            Set<Sentence> toAdd = new HashSet<>();
+                            if (!orMarkIndex.isEmpty()) {
+                                for (int i = 0; i < clauses.length; i++) {
+                                    if (orMarkIndex.contains(i) && !(i == clauses.length - 1 - andMark)) {
+                                        toAdd.addAll(orSentences.get(i));
                                     }
                                 }
                             }
+
+                            for (int i = 0; i < clauses.length; i++) {
+                                if (!((orMarkIndex.contains(i)) || (i == andMark) || (i == clauses.length - 1 - andMark))) {
+                                    toAdd.add(clauses[i]);
+                                }
+                            }
+
                             if (!allAtomic) {
-                                Sentence andOrSentence = AND(andSentence.toArray(new Sentence[0]));
-                                Set<Sentence> orAndSentence = new HashSet<>();
-                                beforeConvert.remove(s);
-                                if (clauses.length == 2) {
-                                    beforeConvert.add(andOrSentence);
+                                Sentence andOrSentence;
+                                if (andSentence.size() > 1) {
+                                    andOrSentence = AND(andSentence.toArray(new Sentence[0]));
                                 } else {
-                                    for (int i = 0; i < clauses.length; i++) {
-                                        if (!(i == andMark) && !(i == clauses.length - 1 - andMark)) {
-                                            orAndSentence.add(clauses[i]);
-                                        }
-                                    }
-                                    orAndSentence.add(andOrSentence);
-                                    Sentence newSentence = OR(orAndSentence.toArray(new Sentence[0]));
-                                    beforeConvert.add(newSentence);
+                                    andOrSentence = andSentence.iterator().next();
+                                }
+                                Set<Sentence> orAndSentence = new HashSet<>();
+                                orAndSentence.add(andOrSentence);
+                                toAdd.addAll(orAndSentence);
+                            }
+                            if (isNegateClauses == clauses.length) {
+                                if (toAdd.size() > 1) {
+                                    Sentence newSentence = OR(toAdd.toArray(new Sentence[0]));
+                                    afterConvert.add(newSentence);
+                                } else {
+                                    afterConvert.add(toAdd.iterator().next());
                                 }
                             } else {
-                                if (orMarkIndex.isEmpty()) {
-                                    afterConvert.add(s);
+                                if (toAdd.size() > 1) {
+                                    Sentence newSentence = OR(toAdd.toArray(new Sentence[0]));
+                                    beforeConvert.add(newSentence);
                                 } else {
-                                    for (int i = 0; i < clauses.length; i++) {
-                                        if (!orMarkIndex.contains(i)) {
-                                            orSentences.add(clauses[i]);
-                                        }
-                                    }
-                                    beforeConvert.add(OR(orSentences.toArray(new Sentence[0])));
+                                    beforeConvert.add(toAdd.iterator().next());
                                 }
-                                beforeConvert.remove(s);
                             }
+                            beforeConvert.remove(s);
                     }
                 }
             }
