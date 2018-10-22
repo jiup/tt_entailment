@@ -27,7 +27,6 @@ public class PLAlgorithms {
             public boolean entails(PLKnowledgeBase kb, Sentence... sentences) {
                 if (DEBUG) {
                     int res = entailsCount(kb, sentences);
-                    System.out.println();
                     if (truthTable.length > 1000) {
                         System.out.println("Too many lines (>1000) in truth table, omitted...");
                     } else {
@@ -108,7 +107,7 @@ public class PLAlgorithms {
                             modelSentences.add(truthTable[i][col] ? columns.remove(0) : ComplexSentence.NOT(columns.remove(0)));
                         }
                         if (model) {
-                            System.out.println("Model #" + count + ":\t" + modelSentences.toString().replaceAll(", ", " ∧ ") + "\tat line " + i);
+                            System.out.println("Model #" + count + ":\t" + modelSentences.toString().replaceAll(", ", " ∧ ") + " at line " + i);
                         } else {
                             System.out.println("False L" + i + ":\t" + modelSentences.toString().replaceAll(", ", " ∧ "));
                         }

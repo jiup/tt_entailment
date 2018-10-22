@@ -30,18 +30,18 @@ public class SampleTest {
             switch (sample) {
                 case "1":
                     AtomicSentence q = new AtomicSentence("Q");
-                    System.out.println("Is Q true? " + entails(KnowledgeBases.modusPonensKnowledgeBase(), strategy, q));
+                    System.out.println("Is Q true?\n" + entails(KnowledgeBases.modusPonensKnowledgeBase(), strategy, q));
                     break;
 
                 case "2":
                     AtomicSentence p12 = new AtomicSentence("P12");
-                    System.out.println("Is P12 true? " + entails(KnowledgeBases.wumpusWorldKnowledgeBase(), strategy, p12));
+                    System.out.println("Is P12 true?\n" + entails(KnowledgeBases.wumpusWorldKnowledgeBase(), strategy, p12));
                     break;
 
                 case "3a":
                     System.out.println("Can we prove that unicorn is mythical? ");
                     if (provable(KnowledgeBases.hornClausesKnowledgeBase(), strategy, new AtomicSentence("mythical")))
-                        System.out.println("true\nIs unicorn mythical? " + strategy.entails(KnowledgeBases.hornClausesKnowledgeBase(), new AtomicSentence("mythical")));
+                        System.out.println("true\n\nIs unicorn mythical?\n" + entails(KnowledgeBases.hornClausesKnowledgeBase(), strategy, new AtomicSentence("mythical")));
                     else
                         System.out.println(false);
                     break;
@@ -49,7 +49,7 @@ public class SampleTest {
                 case "3b":
                     System.out.println("Can we prove that unicorn is magical? ");
                     if (provable(KnowledgeBases.hornClausesKnowledgeBase(), strategy, new AtomicSentence("magical")))
-                        System.out.println("true\nIs unicorn magical? " + strategy.entails(KnowledgeBases.hornClausesKnowledgeBase(), new AtomicSentence("magical")));
+                        System.out.println("true\n\nIs unicorn magical?\n" + entails(KnowledgeBases.hornClausesKnowledgeBase(), strategy, new AtomicSentence("magical")));
                     else
                         System.out.println(false);
                     break;
@@ -57,21 +57,21 @@ public class SampleTest {
                 case "3c":
                     System.out.println("Can we prove that unicorn is horned? ");
                     if (provable(KnowledgeBases.hornClausesKnowledgeBase(), strategy, new AtomicSentence("horned")))
-                        System.out.println("true\nIs unicorn horned? " + strategy.entails(KnowledgeBases.hornClausesKnowledgeBase(), new AtomicSentence("horned")));
+                        System.out.println("true\n\nIs unicorn horned?\n" + entails(KnowledgeBases.hornClausesKnowledgeBase(), strategy, new AtomicSentence("horned")));
                     else
                         System.out.println(false);
                     break;
 
                 case "4a":
-                    System.out.println("Is Amy a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(), new AtomicSentence("Amy")));
-                    System.out.println("Is Bob a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(), new AtomicSentence("Bob")));
-                    System.out.println("Is Cal a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(), new AtomicSentence("Cal")));
+                    System.out.println("Is Amy a truth-teller?\n" + entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(), strategy, new AtomicSentence("Amy")) + "\n");
+                    System.out.println("Is Bob a truth-teller?\n" + entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(), strategy, new AtomicSentence("Bob")) + "\n");
+                    System.out.println("Is Cal a truth-teller?\n" + entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(), strategy, new AtomicSentence("Cal")) + "\n");
                     break;
 
                 case "4b":
-                    System.out.println("Is Amy a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(), new AtomicSentence("Amy")));
-                    System.out.println("Is Bob a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(), new AtomicSentence("Bob")));
-                    System.out.println("Is Cal a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(), new AtomicSentence("Cal")));
+                    System.out.println("Is Amy a truth-teller?\n" + entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(), strategy, new AtomicSentence("Amy")) + "\n");
+                    System.out.println("Is Bob a truth-teller?\n" + entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(), strategy, new AtomicSentence("Bob")) + "\n");
+                    System.out.println("Is Cal a truth-teller?\n" + entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(), strategy, new AtomicSentence("Cal")) + "\n");
                     break;
 
                 case "5":
@@ -87,61 +87,61 @@ public class SampleTest {
                     AtomicSentence Jay = new AtomicSentence("Jay");
                     AtomicSentence Kay = new AtomicSentence("Kay");
                     AtomicSentence Lee = new AtomicSentence("Lee");
-                    System.out.println("Is Amy a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Amy")));
-                    System.out.println("Is Bob a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Bob")));
-                    System.out.println("Is Cal a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Cal")));
-                    System.out.println("Is Dee a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Dee")));
-                    System.out.println("Is Eli a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Eli")));
-                    System.out.println("Is Fay a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Fay")));
-                    System.out.println("Is Gil a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Gil")));
-                    System.out.println("Is Hal a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Hal")));
-                    System.out.println("Is Ida a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Ida")));
-                    System.out.println("Is Jay a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Jay")));
-                    System.out.println("Is Kay a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Kay")));
-                    System.out.println("Is Lee a truth-teller? " + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Lee")));
+                    System.out.println("Is Amy a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Amy")) + "\n");
+                    System.out.println("Is Bob a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Bob")) + "\n");
+                    System.out.println("Is Cal a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Cal")) + "\n");
+                    System.out.println("Is Dee a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Dee")) + "\n");
+                    System.out.println("Is Eli a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Eli")) + "\n");
+                    System.out.println("Is Fay a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Fay")) + "\n");
+                    System.out.println("Is Gil a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Gil")) + "\n");
+                    System.out.println("Is Hal a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Hal")) + "\n");
+                    System.out.println("Is Ida a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Ida")) + "\n");
+                    System.out.println("Is Jay a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Jay")) + "\n");
+                    System.out.println("Is Kay a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Kay")) + "\n");
+                    System.out.println("Is Lee a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Lee")) + "\n");
                     break;
 
                 case "6a":
                     System.out.println("Can we prove if X is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("X")))
-                        System.out.println("true\nIs X a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), new AtomicSentence("X")));
+                        System.out.println("true\n\nIs X a good door?\n" + entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("X")) + "\n");
                     else System.out.println(false);
 
                     System.out.println("Can we prove if Y is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("Y")))
-                        System.out.println("true\nIs Y a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), new AtomicSentence("Y")));
+                        System.out.println("true\n\nIs Y a good door?\n" + entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("Y")) + "\n");
                     else System.out.println(false);
 
                     System.out.println("Can we prove if Z is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("Z")))
-                        System.out.println("true\nIs Z a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), new AtomicSentence("Z")));
+                        System.out.println("true\n\nIs Z a good door?\n" + entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("Z")) + "\n");
                     else System.out.println(false);
 
                     System.out.println("Can we prove if W is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("W")))
-                        System.out.println("true\nIs W a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), new AtomicSentence("W")));
+                        System.out.println("true\n\nIs W a good door?\n" + entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("W")) + "\n");
                     else System.out.println(false);
                     break;
 
                 case "6b":
                     System.out.println("Can we prove if X is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), strategy, new AtomicSentence("X")))
-                        System.out.println("true\nIs X a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), new AtomicSentence("X")));
+                        System.out.println("true\n\nIs X a good door?\n" + entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), strategy, new AtomicSentence("X")) + "\n");
                     else System.out.println(false);
 
                     System.out.println("Can we prove if Y is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), strategy, new AtomicSentence("Y")))
-                        System.out.println("true\nIs Y a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), new AtomicSentence("Y")));
+                        System.out.println("true\n\nIs Y a good door?\n" + entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), strategy, new AtomicSentence("Y")) + "\n");
                     else System.out.println(false);
 
                     System.out.println("Can we prove if Z is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), strategy, new AtomicSentence("Z")))
-                        System.out.println("true\nIs Z a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), new AtomicSentence("Z")));
+                        System.out.println("true\n\nIs Z a good door?\n" + entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), strategy, new AtomicSentence("Z")) + "\n");
                     else System.out.println(false);
 
                     System.out.println("Can we prove if W is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), strategy, new AtomicSentence("W")))
-                        System.out.println("true\nIs W a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), new AtomicSentence("W")));
+                        System.out.println("true\n\nIs W a good door?\n" + entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), strategy, new AtomicSentence("W")) + "\n");
                     else System.out.println(false);
                     break;
                 default:
@@ -152,7 +152,11 @@ public class SampleTest {
     }
 
     public static boolean provable(PLKnowledgeBase kb, PLAlgorithms.Entailment strategy, Sentence... sentences) {
-        return strategy.entails(kb, sentences) != strategy.entails(kb, NOT(sentences.length > 1 ? AND(sentences) : sentences[0]));
+        boolean tmp= PLAlgorithms.DEBUG;
+        PLAlgorithms.DEBUG = false;
+        boolean result = strategy.entails(kb, sentences) != strategy.entails(kb, NOT(sentences.length > 1 ? AND(sentences) : sentences[0]));
+        PLAlgorithms.DEBUG = tmp;
+        return result;
     }
 
     public static boolean entails(PLKnowledgeBase kb, PLAlgorithms.Entailment strategy, Sentence... sentences) {
