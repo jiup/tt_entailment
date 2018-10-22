@@ -13,7 +13,7 @@ import java.util.*;
  * @since 10/12/2018
  */
 public class PLAlgorithms {
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     @SuppressWarnings("Duplicates")
     public enum Entailment implements EntailCheckStrategies {
@@ -25,6 +25,12 @@ public class PLAlgorithms {
 
             @Override
             public boolean entails(PLKnowledgeBase kb, Sentence... sentences) {
+                if (DEBUG) {
+                    int i = entailsCount(kb, sentences);
+                    printTruthTable(true);
+                    return i > 0;
+                }
+
                 if (kb.size() == 0) return true;
 
                 alphaSentences = kb.list().toArray(new Sentence[0]);
@@ -38,6 +44,7 @@ public class PLAlgorithms {
                 int tableSize = symbolSize + sentenceSize;
                 initTable(symbolSize, sentenceSize);
                 loadTruthTable(symbolSize, tableSize);
+                if (DEBUG) printTruthTable(true);
                 return checkEntailment(reduce(alphaSentences, symbolSize), tableSize);
             }
 
@@ -96,7 +103,7 @@ public class PLAlgorithms {
                             modelSentences.add(truthTable[i][col] ? columns.remove(0) : ComplexSentence.NOT(columns.remove(0)));
                         }
                         if (model) {
-                            System.out.println("Model #" + count + ":\t" + modelSentences.toString().replaceAll(", ", " ∧ "));
+                            System.out.println("Model #"+count+"-" + i + ":\t" + modelSentences.toString().replaceAll(", ", " ∧ "));
                         } else {
                             System.out.println("False L" + i + ":\t" + modelSentences.toString().replaceAll(", ", " ∧ "));
                         }
@@ -196,8 +203,12 @@ public class PLAlgorithms {
                         addAll(Arrays.asList(betaSentences));
                     }});
                 }
-                System.out.println(Arrays.deepToString(truthTable).replaceAll("\\[+", "\n")
-                        .replaceAll("]+,? ?", ";").replaceAll("true", "T").replaceAll("false", "F"));
+                int i = 0;
+                for (boolean[] row : truthTable) {
+                    System.out.println(i++ + ":\t" + Arrays.toString(row).replaceAll("true", "T").replaceAll("false", "F"));
+                }
+//                System.out.println(Arrays.deepToString(truthTable).replaceAll("\\[+", "\n")
+//                        .replaceAll("]+,? ?", ";").replaceAll("true", "T").replaceAll("false", "F"));
             }
         },
 
