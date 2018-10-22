@@ -31,7 +31,6 @@ public class ResolutionTest {
         AtomicSentence w12 = new AtomicSentence("W12");
         AtomicSentence w21 = new AtomicSentence("W21");
         Assert.assertTrue(Resolution.entails(KnowledgeBases.exampleKnowledgeBase(), NOT(w12), NOT(w21)));
-
     }
 
     @Test

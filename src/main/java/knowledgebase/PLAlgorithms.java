@@ -29,7 +29,8 @@ public class PLAlgorithms {
                     int res = entailsCount(kb, sentences);
                     System.out.println();
                     printTruthTable(true);
-                    return res >= 0;
+                    System.out.println(res);
+                    return res > 0;
                 }
 
                 if (kb.size() == 0) return true;
@@ -307,7 +308,7 @@ public class PLAlgorithms {
                 }
 
                 resolvents = new HashSet<>(kbSentences);
-                Set<Sentence> newResolvents = new HashSet<Sentence>() {{
+                Set<Sentence> newResolvents = new HashSet<Sentence>(kbSentences) {{
                     if (sentences.length > 1) {
                         addAll(SentenceUtil.convertToCNF(ComplexSentence.NOT(ComplexSentence.AND(sentences))));
                     } else {
@@ -319,7 +320,7 @@ public class PLAlgorithms {
                     if (DEBUG) System.out.println(resolvents);
                     Sentence[] clauses = resolvents.toArray(new Sentence[0]);
                     Sentence[] newClauses = newResolvents.toArray(new Sentence[0]);
-                    newResolvents.clear();
+                    //  newResolvents.clear();
                     for (Sentence newClause : newClauses) {
                         for (Sentence clause : clauses) {
                             if (DEBUG) System.out.println("resolve " + newClause + ", " + clause);
@@ -402,7 +403,7 @@ public class PLAlgorithms {
                             // single sentence remained after deduplicate
                             return set.iterator().next();
                         } else {
-                            if (set.size() > Math.max(clause1.size(), clause2.size())) {
+                            if (set.size() >= Math.max(clause1.size(), clause2.size())) {
                                 return null;
                             }
                             for (Sentence s : set) {
