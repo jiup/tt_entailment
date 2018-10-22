@@ -76,9 +76,13 @@ public class ModelCheckingTest {
         AtomicSentence w = new AtomicSentence("W");
 
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), x));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), NOT(x)));
         Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), y));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), NOT(y)));
         Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), z));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), NOT(z)));
         Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), w));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), NOT(w)));
 
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), x));
         Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), NOT(x)));

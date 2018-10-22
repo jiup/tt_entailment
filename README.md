@@ -1,22 +1,106 @@
-# Part I: Basic Model Checking
+## CSC442 - Project 2: Automated Reasoning
 
-The first technique you must implement is the “truth-table enumeration method” described in AIMA Figure 7.10. The algorithm is conceptually straightforward you may not really even need their pseudo-code. We also discussed this in class, and it is presented in the lecture slides.
 
-You will also need to represent a “model” (a.k.a. possible world, or assignment of truth values). And then you need to use that representation in the implementation of the algorithm. This is a very important design point. I suggest that you do something clear and correct but not necessarily efficient first, then improve it as time permits and your problems demand. If you use a language like Java, C++, or Python you may be particularly well served by the Set, Vector, or Hash-table/Dictionary data structures.
 
-You must test your implementation on at least four of the problems described below.
+#### Collaborators
 
-# Part II: Advanced Propositional Inference
+Jiupeng Zhang, Yu Zhang, Lu Zhang
 
-For the second part of this assignment, you must implement one of the other techniques for Propositional Inference described in class and in the textbook. Your choices are:
+#### Requirements
 
-- The DPLL algorithm for checking satisfiability (AIMA Figure 7.17)
-- The WalkSAT algorithm, also for SAT checking (AIMA Figure 7.18)
-- A resolution-based theorem prover (AIMA Figure 7.12)
-- A theorem prover based on other inference rules (if you do this, be sure to explain what you’re doing in detail in your writeup)
+JDK 1.8+
 
-You can use the same classes for representing Propositional Logic sentences as you did for Part I.
+#### Structure of directory
 
-Several of these techniques require the knowledge base to be converted to clauses (conjunctive normal form, CNF). You can write a program that converts arbitrary sentences to CNF. Or you can arrange for the problems that you solve to be expressed as clauses in the first place (which is probably much easier!)
+```shell
+tt_entailment
+├── README.md *
+├── pom.xml
+└── src
+    ├── main
+    │   ├── java
+    │   │   ├── ModelChecking.java [Part I]
+    │   │   ├── Resolution.java    [Part II]
+    │   │   ├── KnowledgeBases.java
+    │   │   ├── domain
+    │   │   │   ├── Sentence.java
+    │   │   │   └── propositional
+    │   │   │       ├── AtomicSentence.java
+    │   │   │       ├── ComplexSentence.java
+    │   │   │       ├── Connective.java
+    │   │   │       └── Sentence.java
+    │   │   ├── knowledgebase
+    │   │   │   ├── KnowledgeBase.java
+    │   │   │   ├── PLAlgorithms.java
+    │   │   │   └── PLKnowledgeBase.java
+    │   │   └── util
+    │   │       └── propositional
+    │   │           └── SentenceUtil.java
+    │   └── resources
+    └── test
+        └── java
+            ├── CNFConversionTest.java
+            ├── ModelCheckingTest.java
+            ├── RecursiveModelCheckingTest.java
+            └── ResolutionTest.java 
+```
 
-As with Part I, you must test your implementation on at least four of the problems de- scribed below. Use the same problems and compare the techniques in your writeup. If you can’t use the same problems, explain why in your writeup.
+
+
+#### Compile & Run
+
+- **Compile:**
+
+  1. `cd /path/to/tt_entailment`
+  2. `javac -d out/ $(find ./src/main/ -name '*.java')`
+
+
+- **Run (we did sample 5 & 6 for *bonus*):**
+
+  1. ***Part I: Basic Model Checking***
+
+     - Move to directory:					`$ cd ./out`
+
+     - Sample1 Modus Ponens: 				`$ java ModelChecking 1`
+
+     - Sample2 Wumpus World (Simple):		`$ java ModelChecking 2`
+
+     - Sample3a Mythical unicorn:			`$ java ModelChecking 3a`
+
+     - Sample3b Magical unicorn: 			`$ java ModelChecking 3b`
+
+     - Sample3c Horned unicorn:			`$ java ModelChecking 3c`
+
+     - Sample4a OSSMB 82-12:				`$ java ModelChecking 4a`
+
+     - Sample4b OSSMB 83-11:				`$ java ModelChecking 4b`
+
+     - Sample5 More Liars and Truth-tellers:  `$ java ModelChecking 5`
+
+     - Sample6a Smullyan's problem:			`$ java ModelChecking 6a`
+
+     - Sample6b Liu's problem: 				`$ java ModelChecking 6b`
+
+  2. ***Part II: Advanced Propositional Inference***
+
+     - Sample1 Modus Ponens:				`$ java Resolution 1`
+
+     - Sample2 Wumpus World (Simple):		`$ java Resolution 2`
+
+     - Sample3a Mythical unicorn:			`$ java Resolution 3a`
+
+     - Sample3b Magical unicorn:			`$ java Resolution 3b`
+
+     - Sample3c Horned unicorn:			`$ java Resolution 3c`
+
+     - Sample4a OSSMB 82-12:				`$ java Resolution 4a`
+
+     - Sample4b OSSMB 83-11:				`$ java Resolution 4b`
+
+     - Sample5 More Liars and Truth-tellers:	`$ java Resolution 5`
+
+     - Sample6a Smullyan's problem:			`$ java Resolution 6a`
+
+     - Sample6b Liu's problem:				`$ java Resolution 6b`
+
+

@@ -271,8 +271,8 @@ public class KnowledgeBases {
         AtomicSentence g = new AtomicSentence("G");
         AtomicSentence h = new AtomicSentence("H");
         knowledgeBase.insert(BI_IMPLIES(a, x));
-        knowledgeBase.insert(BI_IMPLIES(c, OR(AND(a, NOT(g), NOT(h)), AND(NOT(a), g, NOT(h)), AND(NOT(a), NOT(g), h))));
-        knowledgeBase.insert(BI_IMPLIES(g, IMPLIES(c, OR(a, g, h))));
+        knowledgeBase.insert(BI_IMPLIES(c, a));
+        knowledgeBase.insert(OR(g, c));
         knowledgeBase.insert(BI_IMPLIES(h, IMPLIES(AND(g, h), a)));
         return knowledgeBase;
     }
