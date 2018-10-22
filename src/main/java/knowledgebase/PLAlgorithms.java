@@ -13,7 +13,7 @@ import java.util.*;
  * @since 10/12/2018
  */
 public class PLAlgorithms {
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     @SuppressWarnings("Duplicates")
     public enum Entailment implements EntailCheckStrategies {
@@ -25,6 +25,13 @@ public class PLAlgorithms {
 
             @Override
             public boolean entails(PLKnowledgeBase kb, Sentence... sentences) {
+                if (DEBUG) {
+                    int res = entailsCount(kb, sentences);
+                    System.out.println();
+                    printTruthTable(true);
+                    return res >= 0;
+                }
+
                 if (kb.size() == 0) return true;
 
                 alphaSentences = kb.list().toArray(new Sentence[0]);
