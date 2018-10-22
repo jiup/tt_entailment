@@ -317,7 +317,7 @@ public class PLAlgorithms {
                 }};
 
                 while (kb.size() > 0) {
-                    if (DEBUG) System.out.println(resolvents);
+                    // if (DEBUG) System.out.println(resolvents);
                     Sentence[] clauses = resolvents.toArray(new Sentence[0]);
                     Sentence[] newClauses = newResolvents.toArray(new Sentence[0]);
                     //  newResolvents.clear();
