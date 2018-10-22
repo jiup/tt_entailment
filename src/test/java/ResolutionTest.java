@@ -31,18 +31,21 @@ public class ResolutionTest {
         AtomicSentence w12 = new AtomicSentence("W12");
         AtomicSentence w21 = new AtomicSentence("W21");
         Assert.assertTrue(Resolution.entails(KnowledgeBases.exampleKnowledgeBase(), NOT(w12), NOT(w21)));
+
     }
 
     @Test
     public void testModusPonens() {
         AtomicSentence q = new AtomicSentence("Q");
         Assert.assertTrue(Resolution.entails(KnowledgeBases.modusPonensKnowledgeBase(), q));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.modusPonensKnowledgeBase(), NOT(q)));
     }
 
     @Test
     public void testSimpleWumpusWorld() {
         AtomicSentence p12 = new AtomicSentence("P12");
         Assert.assertTrue(Resolution.entails(KnowledgeBases.wumpusWorldKnowledgeBase(), NOT(p12)));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.wumpusWorldKnowledgeBase(), p12));
     }
 
     @Test
@@ -51,8 +54,11 @@ public class ResolutionTest {
         AtomicSentence magical = new AtomicSentence("magical");
         AtomicSentence horned = new AtomicSentence("horned");
         Assert.assertFalse(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(), mythical));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(), NOT(mythical)));
         Assert.assertTrue(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(), magical));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(), NOT(magical)));
         Assert.assertTrue(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(), horned));
+        Assert.assertFalse(Resolution.entails(KnowledgeBases.hornClausesKnowledgeBase(), NOT(horned)));
     }
 
     @Test

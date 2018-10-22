@@ -22,12 +22,14 @@ public class ModelCheckingTest {
     public void testModusPonens() {
         AtomicSentence q = new AtomicSentence("Q");
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.modusPonensKnowledgeBase(), q));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.modusPonensKnowledgeBase(), NOT(q)));
     }
 
     @Test
     public void testSimpleWumpusWorld() {
         AtomicSentence p12 = new AtomicSentence("P12");
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.wumpusWorldKnowledgeBase(), NOT(p12)));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.wumpusWorldKnowledgeBase(), p12));
     }
 
     @Test
@@ -36,8 +38,11 @@ public class ModelCheckingTest {
         AtomicSentence magical = new AtomicSentence("magical");
         AtomicSentence horned = new AtomicSentence("horned");
         Assert.assertFalse(ModelChecking.entails(KnowledgeBases.hornClausesKnowledgeBase(), mythical));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.hornClausesKnowledgeBase(), NOT(mythical)));
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.hornClausesKnowledgeBase(), magical));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.hornClausesKnowledgeBase(), NOT(magical)));
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.hornClausesKnowledgeBase(), horned));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.hornClausesKnowledgeBase(), NOT(horned)));
     }
 
     @Test
@@ -47,6 +52,9 @@ public class ModelCheckingTest {
         AtomicSentence cal = new AtomicSentence("Cal");
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(), AND(NOT(amy), NOT(bob), cal)));
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(), AND(amy, NOT(bob), NOT(cal))));
+
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.liarsAndTruthTellers1KnowledgeBase(), NOT(AND(NOT(amy), NOT(bob), cal))));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.liarsAndTruthTellers2KnowledgeBase(), NOT(AND(amy, NOT(bob), NOT(cal)))));
     }
 
     @Test
@@ -66,6 +74,9 @@ public class ModelCheckingTest {
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), AND(
                 NOT(Amy), NOT(Bob), NOT(Cal), NOT(Dee), NOT(Eli), NOT(Fay), NOT(Gil), NOT(Hal), NOT(Ida), Jay, Kay, NOT(Lee)
         )));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), NOT(AND(
+                NOT(Amy), NOT(Bob), NOT(Cal), NOT(Dee), NOT(Eli), NOT(Fay), NOT(Gil), NOT(Hal), NOT(Ida), Jay, Kay, NOT(Lee)
+        ))));
     }
 
     @Test
