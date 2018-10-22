@@ -13,7 +13,7 @@ import java.util.*;
  * @since 10/12/2018
  */
 public class PLAlgorithms {
-    private static final boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     @SuppressWarnings("Duplicates")
     public enum Entailment implements EntailCheckStrategies {
@@ -28,8 +28,11 @@ public class PLAlgorithms {
                 if (DEBUG) {
                     int res = entailsCount(kb, sentences);
                     System.out.println();
-                    printTruthTable(true);
-                    System.out.println();
+                    if (truthTable.length > 1000) {
+                        System.out.println("Too many lines (>1000) in truth table, omitted...");
+                    } else {
+                        printTruthTable(true);
+                    }
                     // System.out.println(res);
                     return res > 0;
                 }
@@ -105,7 +108,7 @@ public class PLAlgorithms {
                             modelSentences.add(truthTable[i][col] ? columns.remove(0) : ComplexSentence.NOT(columns.remove(0)));
                         }
                         if (model) {
-                            System.out.println("Model #" + count + ":\t" + modelSentences.toString().replaceAll(", ", " ∧ "));
+                            System.out.println("Model #" + count + ":\t" + modelSentences.toString().replaceAll(", ", " ∧ ") + "\tat line " + i);
                         } else {
                             System.out.println("False L" + i + ":\t" + modelSentences.toString().replaceAll(", ", " ∧ "));
                         }
@@ -205,8 +208,12 @@ public class PLAlgorithms {
                         addAll(Arrays.asList(betaSentences));
                     }});
                 }
-                System.out.println(Arrays.deepToString(truthTable).replaceAll("\\[+", "\n")
-                        .replaceAll("]+,? ?", ";").replaceAll("true", "T").replaceAll("false", "F"));
+                int i = 0;
+                for (boolean[] row : truthTable) {
+                    System.out.println(i++ + "\t" + Arrays.toString(row).replaceAll("]|\\[,? ?", " ").replaceAll("true", "T").replaceAll("false", "F"));
+                }
+//                System.out.println(Arrays.deepToString(truthTable).replaceAll("\\[+", "\n")
+//                        .replaceAll("]+,? ?", ";").replaceAll("true", "T").replaceAll("false", "F"));
             }
         },
 
@@ -305,7 +312,12 @@ public class PLAlgorithms {
                         kbSentences = SentenceUtil.convertToCNF(kbSentences.iterator().next());
                     }
                     checkClauses(kbSentences.toArray(new Sentence[0]));
-                    System.err.println("warn: invalid KnowledgeBase for resolution, auto-converted to CNF KnowledgeBase");
+                    if (DEBUG) {
+                        System.err.println("warn: invalid KnowledgeBase for resolution, auto-converted to CNF KnowledgeBase");
+                        System.out.println("Converted CNF:");
+                        kbSentences.forEach(System.out::println);
+                        System.out.println();
+                    }
                 }
 
                 resolvents = new HashSet<>(kbSentences);

@@ -17,6 +17,7 @@ public class SampleTest {
 
     public SampleTest(PLAlgorithms.Entailment strategy) {
         this.strategy = strategy;
+        PLAlgorithms.DEBUG = true;
     }
 
     public void test(String[] args) {
@@ -101,44 +102,44 @@ public class SampleTest {
                     break;
 
                 case "6a":
-                    System.out.print("Can we prove if X is a good door? ");
+                    System.out.println("Can we prove if X is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("X")))
                         System.out.println("true\nIs X a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), new AtomicSentence("X")));
                     else System.out.println(false);
 
-                    System.out.print("Can we prove if Y is a good door? ");
+                    System.out.println("Can we prove if Y is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("Y")))
                         System.out.println("true\nIs Y a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), new AtomicSentence("Y")));
                     else System.out.println(false);
 
-                    System.out.print("Can we prove if Z is a good door? ");
+                    System.out.println("Can we prove if Z is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("Z")))
                         System.out.println("true\nIs Z a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), new AtomicSentence("Z")));
                     else System.out.println(false);
 
-                    System.out.print("Can we prove if W is a good door? ");
+                    System.out.println("Can we prove if W is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("W")))
                         System.out.println("true\nIs W a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), new AtomicSentence("W")));
                     else System.out.println(false);
                     break;
 
                 case "6b":
-                    System.out.print("Can we prove if X is a good door? ");
+                    System.out.println("Can we prove if X is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), strategy, new AtomicSentence("X")))
                         System.out.println("true\nIs X a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), new AtomicSentence("X")));
                     else System.out.println(false);
 
-                    System.out.print("Can we prove if Y is a good door? ");
+                    System.out.println("Can we prove if Y is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), strategy, new AtomicSentence("Y")))
                         System.out.println("true\nIs Y a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), new AtomicSentence("Y")));
                     else System.out.println(false);
 
-                    System.out.print("Can we prove if Z is a good door? ");
+                    System.out.println("Can we prove if Z is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), strategy, new AtomicSentence("Z")))
                         System.out.println("true\nIs Z a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), new AtomicSentence("Z")));
                     else System.out.println(false);
 
-                    System.out.print("Can we prove if W is a good door? ");
+                    System.out.println("Can we prove if W is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), strategy, new AtomicSentence("W")))
                         System.out.println("true\nIs W a good door? " + strategy.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), new AtomicSentence("W")));
                     else System.out.println(false);
