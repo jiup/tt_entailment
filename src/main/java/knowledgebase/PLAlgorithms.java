@@ -29,6 +29,7 @@ public class PLAlgorithms {
                     int res = entailsCount(kb, sentences);
                     System.out.println();
                     printTruthTable(true);
+                    System.out.println();
                     // System.out.println(res);
                     return res > 0;
                 }
