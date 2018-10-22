@@ -38,7 +38,7 @@ public class SampleTest {
                     break;
 
                 case "3a":
-                    System.out.print("Can we prove that unicorn is mythical? ");
+                    System.out.println("Can we prove that unicorn is mythical? ");
                     if (provable(KnowledgeBases.hornClausesKnowledgeBase(), strategy, new AtomicSentence("mythical")))
                         System.out.println("true\nIs unicorn mythical? " + strategy.entails(KnowledgeBases.hornClausesKnowledgeBase(), new AtomicSentence("mythical")));
                     else
@@ -46,7 +46,7 @@ public class SampleTest {
                     break;
 
                 case "3b":
-                    System.out.print("Can we prove that unicorn is magical? ");
+                    System.out.println("Can we prove that unicorn is magical? ");
                     if (provable(KnowledgeBases.hornClausesKnowledgeBase(), strategy, new AtomicSentence("magical")))
                         System.out.println("true\nIs unicorn magical? " + strategy.entails(KnowledgeBases.hornClausesKnowledgeBase(), new AtomicSentence("magical")));
                     else
@@ -54,7 +54,7 @@ public class SampleTest {
                     break;
 
                 case "3c":
-                    System.out.print("Can we prove that unicorn is horned? ");
+                    System.out.println("Can we prove that unicorn is horned? ");
                     if (provable(KnowledgeBases.hornClausesKnowledgeBase(), strategy, new AtomicSentence("horned")))
                         System.out.println("true\nIs unicorn horned? " + strategy.entails(KnowledgeBases.hornClausesKnowledgeBase(), new AtomicSentence("horned")));
                     else
