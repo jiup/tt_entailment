@@ -81,5 +81,12 @@ public class ModelCheckingTest {
         Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), w));
 
         Assert.assertTrue(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), x));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), NOT(x)));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), y));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), NOT(y)));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), z));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), NOT(z)));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), w));
+        Assert.assertFalse(ModelChecking.entails(KnowledgeBases.doorsOfEnlightenment2KnowledgeBase(), NOT(w)));
     }
 }
