@@ -220,4 +220,107 @@ public class SentenceUtil {
         Set<Sentence> afterConvert = new HashSet<>();
         return convertToCNF(beforeConvert, afterConvert);
     }
+    public static Sentence parser(String alpha) {
+        if (alpha.contains("(")) {
+            int last = alpha.lastIndexOf(")");
+            int first = alpha.indexOf("(");
+            String subString = alpha.substring(first + 1, last);
+            Sentence midSentence = parser(subString);
+            Sentence leftSentence = null;
+            if (first > 0) {
+                switch (alpha.charAt(first - 1)) {
+                    case '>':
+                        if (alpha.charAt(first - 3) == '<') {
+                            leftSentence = BI_IMPLIES(parser(alpha.substring(0, first - 3)), midSentence);
+                        } else {
+                            leftSentence = IMPLIES(parser(alpha.substring(0, first - 2)), midSentence);
+                        }
+                        break;
+                    case '&':
+                        leftSentence = AND(parser(alpha.substring(0, first - 2)), midSentence);
+                        break;
+                    case '|':
+                        leftSentence = OR(parser(alpha.substring(0, first - 2)), midSentence);
+                        break;
+                }
+            }
+            Sentence rightSentence = null;
+            if (last < alpha.length() - 1) {
+                switch (alpha.charAt(last + 1)) {
+                    case '<':
+                        rightSentence = leftSentence == null ? BI_IMPLIES(parser(alpha.substring(last + 4)), midSentence) : BI_IMPLIES(leftSentence, parser(alpha.substring(last + 4)));
+                        break;
+                    case '=':
+                        rightSentence = leftSentence == null ? IMPLIES(midSentence, parser(alpha.substring(last + 3))) : IMPLIES(leftSentence, parser(alpha.substring(last + 3)));
+                        break;
+                    case '&':
+                        rightSentence = leftSentence == null ? AND(midSentence, parser(alpha.substring(0, last + 2))) : AND(parser(alpha.substring(0, first + 2)), leftSentence);
+                        break;
+                    case '|':
+                        rightSentence = leftSentence == null ? OR(midSentence, parser(alpha.substring(0, last + 2))) : OR(parser(alpha.substring(0, first + 2)), leftSentence);
+                        break;
+                }
+            }
+            if (!(rightSentence == null)) {
+                return rightSentence;
+            } else if (!(leftSentence == null)) {
+                return leftSentence;
+            } else {
+                return midSentence;
+            }
+        }
+        if (alpha.contains("<=>")) {
+            String[] subSentence = alpha.split("<=>");
+            Sentence result = null;
+            for (String s : subSentence) {
+                result = result == null ? parser(s) : BI_IMPLIES(result, parser(s));
+            }
+            return result;
+        }
+
+        if (alpha.contains("=>")) {
+            String[] subSentence = alpha.split("=>");
+            Sentence result = null;
+            for (String s : subSentence) {
+                result = result == null ? parser(s) : IMPLIES(result, parser(s));
+            }
+            return result;
+        }
+        if (alpha.contains("&")) {
+            String[] subSentence = alpha.split("&");
+            Sentence result = null;
+            for (String s : subSentence) {
+                try {
+                    result = result == null ? parser(s) : AND(result, parser(s));
+                } catch (Exception e) {
+                    System.err.println("invalid input!!!!!! AND");
+                }
+
+            }
+            return result;
+        }
+        if (alpha.contains("|")) {
+            String[] subSentence = alpha.split("\\|");
+            Sentence result = null;
+            for (String s : subSentence) {
+                try {
+                    result = result == null ? parser(s) : OR(result, parser(s));
+                } catch (Exception e) {
+                    System.err.println("invalid input!!!!!!  OR");
+                }
+            }
+            return result;
+        }
+        if (alpha.contains("!")) {
+            String subSentence = alpha.substring(1);
+            AtomicSentence obj = new AtomicSentence(subSentence);
+            return NOT(obj);
+        }
+        Sentence ss = new AtomicSentence(alpha);
+        return ss;
+    }
+    public static void main(String[] args) {
+        Sentence sentence = parser("!a&b=>c<=>d");
+        System.out.println(sentence.toString());
+    }
 }
