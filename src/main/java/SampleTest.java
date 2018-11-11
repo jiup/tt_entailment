@@ -75,6 +75,7 @@ public class SampleTest {
                     break;
 
                 case "5":
+                    if (strategy == PLAlgorithms.Entailment.Resolution) PLAlgorithms.DEBUG = false;
                     AtomicSentence Amy = new AtomicSentence("Amy");
                     AtomicSentence Bob = new AtomicSentence("Bob");
                     AtomicSentence Cal = new AtomicSentence("Cal");
@@ -99,9 +100,11 @@ public class SampleTest {
                     System.out.println("Is Jay a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Jay")) + "\n");
                     System.out.println("Is Kay a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Kay")) + "\n");
                     System.out.println("Is Lee a truth-teller?\n" + strategy.entails(KnowledgeBases.liarsAndTruthTellers3KnowledgeBase(), new AtomicSentence("Lee")) + "\n");
+                    if (strategy == PLAlgorithms.Entailment.Resolution) PLAlgorithms.DEBUG = true;
                     break;
 
                 case "6a":
+                    if (strategy == PLAlgorithms.Entailment.Resolution) PLAlgorithms.DEBUG = false;
                     System.out.println("Can we prove if X is a good door? ");
                     if (provable(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("X")))
                         System.out.println("true\n\nIs X a good door?\n" + entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("X")) + "\n");
@@ -121,6 +124,7 @@ public class SampleTest {
                     if (provable(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("W")))
                         System.out.println("true\n\nIs W a good door?\n" + entails(KnowledgeBases.doorsOfEnlightenment1KnowledgeBase(), strategy, new AtomicSentence("W")) + "\n");
                     else System.out.println(false);
+                    if (strategy == PLAlgorithms.Entailment.Resolution) PLAlgorithms.DEBUG = true;
                     break;
 
                 case "6b":
@@ -152,7 +156,7 @@ public class SampleTest {
     }
 
     public static boolean provable(PLKnowledgeBase kb, PLAlgorithms.Entailment strategy, Sentence... sentences) {
-        boolean tmp= PLAlgorithms.DEBUG;
+        boolean tmp = PLAlgorithms.DEBUG;
         PLAlgorithms.DEBUG = false;
         boolean result = strategy.entails(kb, sentences) != strategy.entails(kb, NOT(sentences.length > 1 ? AND(sentences) : sentences[0]));
         PLAlgorithms.DEBUG = tmp;

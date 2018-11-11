@@ -1,14 +1,12 @@
-## CSC442 - Project 2: Automated Reasoning
+## AI Project 2: Automated Reasoning
 
-
-
-#### Collaborators
-
-Jiupeng Zhang, Yu Zhang, Lu Zhang
+For more detailed documentation, please see [readme.pdf](README.pdf)
 
 #### Requirements
 
 JDK 1.8+
+
+
 
 #### Structure of directory
 
@@ -21,6 +19,7 @@ tt_entailment
     │   ├── java
     │   │   ├── ModelChecking.java [Part I]
     │   │   ├── Resolution.java    [Part II]
+    │   │   ├── SampleTest.java
     │   │   ├── KnowledgeBases.java
     │   │   ├── domain
     │   │   │   ├── Sentence.java
@@ -55,7 +54,10 @@ tt_entailment
   2. `javac -d out/ $(find ./src/main/ -name '*.java')`
 
 
+
+
 - **Run (we did sample 5 & 6 for *bonus*):**
+
 
   1. ***Part I: Basic Model Checking***
 
@@ -81,6 +83,7 @@ tt_entailment
 
      - Sample6b Liu's problem: 				`$ java ModelChecking 6b`
 
+
   2. ***Part II: Advanced Propositional Inference***
 
      - Sample1 Modus Ponens:				`$ java Resolution 1`
@@ -102,5 +105,4 @@ tt_entailment
      - Sample6a Smullyan's problem:			`$ java Resolution 6a`
 
      - Sample6b Liu's problem:				`$ java Resolution 6b`
-
 
